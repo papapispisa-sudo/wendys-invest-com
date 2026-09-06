@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccueilRouteImport } from './routes/accueil'
+import { Route as ProduitsRouteImport } from './routes/produits'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const AccueilRoute = AccueilRouteImport.update({
   path: '/accueil',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProduitsRoute = ProduitsRouteImport.update({
+  id: '/produits',
+  path: '/produits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/produits': typeof ProduitsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/produits': typeof ProduitsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/produits': typeof ProduitsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accueil'
+  fullPaths: '/' | '/accueil' | '/produits'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accueil'
-  id: '__root__' | '/' | '/accueil'
+  to: '/' | '/accueil' | '/produits'
+  id: '__root__' | '/' | '/accueil' | '/produits'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccueilRoute: typeof AccueilRoute
+  ProduitsRoute: typeof ProduitsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccueilRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/produits': {
+      id: '/produits'
+      path: '/produits'
+      fullPath: '/produits'
+      preLoaderRoute: typeof ProduitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccueilRoute: AccueilRoute,
+  ProduitsRoute: ProduitsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
