@@ -144,6 +144,13 @@ function AuthPage() {
         </p>
       </div>
 
+      <img
+        src={hero.url}
+        alt="Restaurant Wendy's illuminé la nuit"
+        className="h-44 w-full object-cover sm:h-56"
+        loading="lazy"
+      />
+
       <div className="mx-auto -mt-6 w-full max-w-md px-4">
         <div className="card-soft p-5">
           <div className="mb-5 grid grid-cols-2 rounded-xl bg-muted p-1 text-sm font-semibold">
