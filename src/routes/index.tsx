@@ -9,7 +9,7 @@ import { COUNTRIES, phoneIdentity, normalizePhone } from "@/lib/wendys";
 import { useSession } from "@/hooks/useAccount";
 import logo from "@/assets/wendys-logo.jpg.asset.json";
 
-type Search = { ref?: string };
+type Search = { ref?: string | undefined };
 
 export const Route = createFileRoute("/")({
   ssr: false,
