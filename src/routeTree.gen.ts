@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccueilRouteImport } from './routes/accueil'
+import { Route as DepotRouteImport } from './routes/depot'
+import { Route as HistoriqueRouteImport } from './routes/historique'
 import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as ParrainageRouteImport } from './routes/parrainage'
 import { Route as ProduitsRouteImport } from './routes/produits'
+import { Route as RetraitRouteImport } from './routes/retrait'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,6 +26,16 @@ const IndexRoute = IndexRouteImport.update({
 const AccueilRoute = AccueilRouteImport.update({
   id: '/accueil',
   path: '/accueil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DepotRoute = DepotRouteImport.update({
+  id: '/depot',
+  path: '/depot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoriqueRoute = HistoriqueRouteImport.update({
+  id: '/historique',
+  path: '/historique',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ParametresRoute = ParametresRouteImport.update({
@@ -40,44 +53,85 @@ const ProduitsRoute = ProduitsRouteImport.update({
   path: '/produits',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RetraitRoute = RetraitRouteImport.update({
+  id: '/retrait',
+  path: '/retrait',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/depot': typeof DepotRoute
+  '/historique': typeof HistoriqueRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
+  '/retrait': typeof RetraitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/depot': typeof DepotRoute
+  '/historique': typeof HistoriqueRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
+  '/retrait': typeof RetraitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/depot': typeof DepotRoute
+  '/historique': typeof HistoriqueRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
+  '/retrait': typeof RetraitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accueil' | '/parametres' | '/parrainage' | '/produits'
+  fullPaths:
+    | '/'
+    | '/accueil'
+    | '/depot'
+    | '/historique'
+    | '/parametres'
+    | '/parrainage'
+    | '/produits'
+    | '/retrait'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accueil' | '/parametres' | '/parrainage' | '/produits'
+  to:
+    | '/'
+    | '/accueil'
+    | '/depot'
+    | '/historique'
+    | '/parametres'
+    | '/parrainage'
+    | '/produits'
+    | '/retrait'
   id:
-    '__root__' | '/' | '/accueil' | '/parametres' | '/parrainage' | '/produits'
+    | '__root__'
+    | '/'
+    | '/accueil'
+    | '/depot'
+    | '/historique'
+    | '/parametres'
+    | '/parrainage'
+    | '/produits'
+    | '/retrait'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccueilRoute: typeof AccueilRoute
+  DepotRoute: typeof DepotRoute
+  HistoriqueRoute: typeof HistoriqueRoute
   ParametresRoute: typeof ParametresRoute
   ParrainageRoute: typeof ParrainageRoute
   ProduitsRoute: typeof ProduitsRoute
+  RetraitRoute: typeof RetraitRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -94,6 +148,20 @@ declare module '@tanstack/react-router' {
       path: '/accueil'
       fullPath: '/accueil'
       preLoaderRoute: typeof AccueilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/depot': {
+      id: '/depot'
+      path: '/depot'
+      fullPath: '/depot'
+      preLoaderRoute: typeof DepotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historique': {
+      id: '/historique'
+      path: '/historique'
+      fullPath: '/historique'
+      preLoaderRoute: typeof HistoriqueRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parametres': {
@@ -117,15 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProduitsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/retrait': {
+      id: '/retrait'
+      path: '/retrait'
+      fullPath: '/retrait'
+      preLoaderRoute: typeof RetraitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccueilRoute: AccueilRoute,
+  DepotRoute: DepotRoute,
+  HistoriqueRoute: HistoriqueRoute,
   ParametresRoute: ParametresRoute,
   ParrainageRoute: ParrainageRoute,
   ProduitsRoute: ProduitsRoute,
+  RetraitRoute: RetraitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
