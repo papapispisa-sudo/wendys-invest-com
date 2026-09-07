@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { ChevronDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,8 +9,32 @@ import { Label } from "@/components/ui/label";
 import { COUNTRIES, phoneIdentity, normalizePhone } from "@/lib/wendys";
 import { useSession } from "@/hooks/useAccount";
 import logo from "@/assets/wendys-logo.jpg.asset.json";
+import hero from "@/assets/wendys-hero.jpg.asset.json";
 
 type Search = { ref?: string | undefined };
+
+const FAQ = [
+  {
+    q: "Quel est le dépôt minimum ?",
+    a: "Le dépôt minimum est de 2000 FCFA, via MTN, WAVE, Orange, MOOV, TMONEY ou YAS selon votre pays.",
+  },
+  {
+    q: "Quand puis-je retirer mes gains ?",
+    a: "Les retraits sont possibles de 11h à 18h GMT, après l'achat d'au moins un produit. Le retrait minimum est de 1000 FCFA.",
+  },
+  {
+    q: "Comment fonctionnent les produits ?",
+    a: "Chaque produit rapporte un revenu quotidien pendant 45 jours. Le premier produit coûte 2000 FCFA et rapporte 600 FCFA par jour.",
+  },
+  {
+    q: "Comment fonctionne le parrainage ?",
+    a: "Invitez vos amis avec votre code : vous gagnez 30 % au niveau 1, 3 % au niveau 2 et 2 % au niveau 3 sur leurs achats de produits.",
+  },
+  {
+    q: "Quels bonus sont offerts ?",
+    a: "Vous recevez 1000 FCFA à l'inscription et un bonus quotidien de 125 FCFA chaque jour de connexion.",
+  },
+];
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -118,6 +143,13 @@ function AuthPage() {
           Investissez dès 2000 FCFA et recevez vos revenus chaque jour.
         </p>
       </div>
+
+      <img
+        src={hero.url}
+        alt="Restaurant Wendy's illuminé la nuit"
+        className="h-44 w-full object-cover sm:h-56"
+        loading="lazy"
+      />
 
       <div className="mx-auto -mt-6 w-full max-w-md px-4">
         <div className="card-soft p-5">
