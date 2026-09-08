@@ -7,6 +7,14 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useProducts, useProfile } from "@/hooks/useAccount";
 import { formatFcfa } from "@/lib/wendys";
+import store1 from "@/assets/wendys-store-1.jpg.asset.json";
+import store2 from "@/assets/wendys-store-2.jpg.asset.json";
+import store3 from "@/assets/wendys-store-3.jpg.asset.json";
+import store4 from "@/assets/wendys-store-4.jpg.asset.json";
+import store5 from "@/assets/wendys-store-5.jpg.asset.json";
+import store6 from "@/assets/wendys-store-6.jpg.asset.json";
+
+const PRODUCT_IMAGES = [store1.url, store2.url, store3.url, store4.url, store5.url, store6.url];
 
 export const Route = createFileRoute("/produits")({
   ssr: false,
@@ -49,12 +57,20 @@ function Produits() {
       </p>
 
       <div className="space-y-3">
-        {(products ?? []).map((p) => {
+        {(products ?? []).map((p, i) => {
           const total = Number(p.daily_return) * p.duration_days;
           return (
             <article key={p.id} className="card-soft overflow-hidden">
               <div className="brand-gradient flex items-center justify-between px-4 py-2.5 text-primary-foreground">
-                <p className="font-display text-lg">{p.name}</p>
+                <div className="flex items-center gap-2.5">
+                  <img
+                    src={PRODUCT_IMAGES[i % PRODUCT_IMAGES.length]}
+                    alt=""
+                    className="h-9 w-9 rounded-full border-2 border-white/70 object-cover"
+                    loading="lazy"
+                  />
+                  <p className="font-display text-lg">{p.name}</p>
+                </div>
                 <p className="text-sm font-semibold">{formatFcfa(p.price)}</p>
               </div>
               <div className="grid grid-cols-3 gap-2 p-4 text-center text-xs">

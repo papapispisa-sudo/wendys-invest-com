@@ -236,7 +236,7 @@ function AuthPage() {
           </form>
         </div>
 
-        <div className="mt-4 grid grid-cols-3 gap-2 pb-10 text-center text-xs">
+        <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
           {[
             ["1000 FCFA", "Bonus d'inscription"],
             ["125 FCFA", "Bonus quotidien"],
@@ -248,6 +248,36 @@ function AuthPage() {
             </div>
           ))}
         </div>
+
+        <section className="card-soft mt-4 p-5">
+          <h2 className="font-display text-xl text-primary">Avant-propos</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Wendy's est une plateforme d'investissement pensée pour l'Afrique de l'Ouest. Notre
+            mission est simple : permettre à chacun, quel que soit son budget, de faire fructifier
+            son argent au quotidien. Avec un dépôt minimum de seulement 2000 FCFA et des paiements
+            mobiles adaptés à votre pays (MTN, WAVE, Orange, MOOV, TMONEY, YAS), vous investissez en
+            toute simplicité et suivez vos revenus jour après jour.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Rejoignez une communauté qui grandit chaque jour en Côte d'Ivoire, au Bénin, au Burkina
+            Faso et au Togo. Ensemble, construisons votre avenir financier.
+          </p>
+        </section>
+
+        <section className="mt-4 pb-10">
+          <h2 className="mb-3 font-display text-xl text-primary">Questions fréquentes</h2>
+          <div className="space-y-2">
+            {FAQ.map((item, i) => (
+              <details key={i} className="card-soft group px-4 py-3">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold">
+                  {item.q}
+                  <ChevronDown className="h-4 w-4 shrink-0 text-primary transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
