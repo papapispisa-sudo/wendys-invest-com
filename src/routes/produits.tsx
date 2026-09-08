@@ -57,12 +57,20 @@ function Produits() {
       </p>
 
       <div className="space-y-3">
-        {(products ?? []).map((p) => {
+        {(products ?? []).map((p, i) => {
           const total = Number(p.daily_return) * p.duration_days;
           return (
             <article key={p.id} className="card-soft overflow-hidden">
               <div className="brand-gradient flex items-center justify-between px-4 py-2.5 text-primary-foreground">
-                <p className="font-display text-lg">{p.name}</p>
+                <div className="flex items-center gap-2.5">
+                  <img
+                    src={PRODUCT_IMAGES[i % PRODUCT_IMAGES.length]}
+                    alt=""
+                    className="h-9 w-9 rounded-full border-2 border-white/70 object-cover"
+                    loading="lazy"
+                  />
+                  <p className="font-display text-lg">{p.name}</p>
+                </div>
                 <p className="text-sm font-semibold">{formatFcfa(p.price)}</p>
               </div>
               <div className="grid grid-cols-3 gap-2 p-4 text-center text-xs">
