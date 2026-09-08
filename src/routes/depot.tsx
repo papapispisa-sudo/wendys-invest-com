@@ -34,6 +34,8 @@ function Depot() {
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [busy, setBusy] = useState(false);
 
+  const PAYMENT_URL = "https://monniz.com/p/wendys";
+
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const value = Number(amount);
@@ -53,7 +55,9 @@ function Depot() {
       return;
     }
     queryClient.invalidateQueries();
-    toast.success("Demande de dépôt enregistrée. Suivez les instructions de paiement.");
+    toast.success("Demande enregistrée. Finalisez le paiement sur Monniz.");
+    // Redirection vers la page de paiement automatique Monniz
+    window.open(PAYMENT_URL, "_blank", "noopener,noreferrer");
     navigate({ to: "/accueil" });
   }
 
@@ -116,13 +120,15 @@ function Depot() {
         <div className="flex gap-2 rounded-xl bg-muted p-3 text-xs text-muted-foreground">
           <Info className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
           <p>
-            Le paiement automatique par Mobile Money sera activé dès que votre compte marchand sera
-            relié. En attendant, votre demande est enregistrée et validée après réception.
+            Après validation, vous serez redirigé vers notre page de paiement sécurisée Monniz
+            (MTN, WAVE, Orange, MOOV, TMONEY, YAS) pour finaliser le paiement de{" "}
+            <strong>{formatFcfa(Number(amount) || 0)}</strong>. Votre solde est crédité après
+            réception du paiement.
           </p>
         </div>
 
         <Button type="submit" disabled={busy} className="h-12 w-full font-bold">
-          {busy ? "Envoi..." : "Valider le dépôt"}
+          {busy ? "Envoi..." : "Valider et payer avec Monniz"}
         </Button>
       </form>
     </AppShell>
