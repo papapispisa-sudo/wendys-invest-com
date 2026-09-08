@@ -7,6 +7,14 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useProducts, useProfile } from "@/hooks/useAccount";
 import { formatFcfa } from "@/lib/wendys";
+import store1 from "@/assets/wendys-store-1.jpg.asset.json";
+import store2 from "@/assets/wendys-store-2.jpg.asset.json";
+import store3 from "@/assets/wendys-store-3.jpg.asset.json";
+import store4 from "@/assets/wendys-store-4.jpg.asset.json";
+import store5 from "@/assets/wendys-store-5.jpg.asset.json";
+import store6 from "@/assets/wendys-store-6.jpg.asset.json";
+
+const PRODUCT_IMAGES = [store1.url, store2.url, store3.url, store4.url, store5.url, store6.url];
 
 export const Route = createFileRoute("/produits")({
   ssr: false,
