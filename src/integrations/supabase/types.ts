@@ -63,6 +63,7 @@ export type Database = {
       }
       products: {
         Row: {
+          active: boolean
           created_at: string
           daily_return: number
           duration_days: number
@@ -72,6 +73,7 @@ export type Database = {
           rank: number
         }
         Insert: {
+          active?: boolean
           created_at?: string
           daily_return: number
           duration_days?: number
@@ -81,6 +83,7 @@ export type Database = {
           rank: number
         }
         Update: {
+          active?: boolean
           created_at?: string
           daily_return?: number
           duration_days?: number
@@ -177,16 +180,100 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      admin_add_funds: {
+        Args: { p_amount: number; p_note?: string; p_user_id: string }
+        Returns: undefined
+      }
+      admin_overview: {
+        Args: never
+        Returns: {
+          pending_deposits: number
+          pending_withdrawals: number
+          profit: number
+          total_balance: number
+          total_deposits: number
+          total_invested: number
+          total_withdrawals: number
+          users_count: number
+        }[]
+      }
+      admin_set_product_active: {
+        Args: { p_active: boolean; p_product_id: string }
+        Returns: undefined
+      }
+      admin_set_transaction_status: {
+        Args: { p_id: string; p_status: string }
+        Returns: undefined
+      }
+      admin_transactions: {
+        Args: { p_status?: string }
+        Returns: {
+          amount: number
+          created_at: string
+          id: string
+          kind: string
+          method: string
+          note: string
+          phone: string
+          status: string
+          user_id: string
+          user_phone: string
+        }[]
+      }
+      admin_users: {
+        Args: { p_search?: string }
+        Returns: {
+          balance: number
+          country: string
+          created_at: string
+          has_invested: boolean
+          id: string
+          invite_code: string
+          is_admin: boolean
+          phone: string
+          referral_earned: number
+          total_earned: number
+        }[]
+      }
       claim_daily_bonus: { Args: never; Returns: undefined }
       create_deposit: {
         Args: { p_amount: number; p_method: string; p_phone: string }
         Returns: string
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: never; Returns: boolean }
       purchase_product: { Args: { p_product_id: string }; Returns: undefined }
       referral_stats: {
         Args: never
@@ -203,7 +290,7 @@ export type Database = {
       sync_earnings: { Args: never; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -330,6 +417,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
