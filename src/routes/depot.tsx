@@ -128,7 +128,7 @@ function Depot() {
         </div>
 
         <Button type="submit" disabled={busy} className="h-12 w-full font-bold">
-          {busy ? "Envoi..." : "Valider le dépôt"}
+          {busy ? "Envoi..." : "Valider et payer avec Monniz"}
         </Button>
       </form>
     </AppShell>
