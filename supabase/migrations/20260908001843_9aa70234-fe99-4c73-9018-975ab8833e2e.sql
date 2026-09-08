@@ -1,0 +1,15 @@
+REVOKE EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.is_admin() FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_overview() FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_users(text) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_transactions(text) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_set_transaction_status(uuid, text) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_add_funds(uuid, numeric, text) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_set_product_active(uuid, boolean) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.purchase_product(uuid) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.claim_daily_bonus() FROM anon;
+REVOKE EXECUTE ON FUNCTION public.create_deposit(numeric, text, text) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.request_withdrawal(numeric, text, text) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.sync_earnings() FROM anon;
+REVOKE EXECUTE ON FUNCTION public.referral_stats() FROM anon;
+REVOKE EXECUTE ON FUNCTION public.handle_new_user() FROM anon, authenticated;
