@@ -5,6 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useAccount";
+import { useIsAdmin } from "@/hooks/useAdmin";
 import { COUNTRIES, MIN_DEPOSIT, MIN_WITHDRAWAL, formatFcfa } from "@/lib/wendys";
 
 export const Route = createFileRoute("/parametres")({
