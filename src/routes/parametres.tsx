@@ -5,6 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useAccount";
+import { useIsAdmin } from "@/hooks/useAdmin";
 import { COUNTRIES, MIN_DEPOSIT, MIN_WITHDRAWAL, formatFcfa } from "@/lib/wendys";
 
 export const Route = createFileRoute("/parametres")({
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/parametres")({
 
 function Parametres() {
   const { data: profile } = useProfile();
+  const { data: isAdmin } = useIsAdmin();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const country = COUNTRIES.find((c) => c.code === profile?.country);
@@ -76,6 +78,12 @@ function Parametres() {
           <History className="h-5 w-5 text-primary" />
           <span className="flex-1 font-semibold">Historique complet</span>
         </Link>
+        {isAdmin && (
+          <Link to="/admin" className="card-soft flex items-center gap-3 p-4">
+            <ShieldCheck className="h-5 w-5 text-primary" />
+            <span className="flex-1 font-semibold">Espace administrateur</span>
+          </Link>
+        )}
       </section>
 
       <section className="card-soft mt-4 space-y-2 p-4 text-sm text-muted-foreground">
