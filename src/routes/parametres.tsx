@@ -76,6 +76,12 @@ function Parametres() {
           <History className="h-5 w-5 text-primary" />
           <span className="flex-1 font-semibold">Historique complet</span>
         </Link>
+        {isAdmin && (
+          <Link to="/admin" className="card-soft flex items-center gap-3 p-4">
+            <ShieldCheck className="h-5 w-5 text-primary" />
+            <span className="flex-1 font-semibold">Espace administrateur</span>
+          </Link>
+        )}
       </section>
 
       <section className="card-soft mt-4 space-y-2 p-4 text-sm text-muted-foreground">
