@@ -42,7 +42,12 @@ export const Route = createFileRoute("/")({
     ref: typeof search['ref'] === "string" ? search['ref'] : undefined,
   }),
   head: () => ({
+    links: [
+      { rel: "preload", as: "image", href: logo.url, fetchpriority: "high" },
+      { rel: "preconnect", href: new URL(hero.url, "https://x.invalid").origin },
+    ],
     meta: [
+
       { title: "Wendy's — Investissez et gagnez chaque jour" },
       {
         name: "description",
