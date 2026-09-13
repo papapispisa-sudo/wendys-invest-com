@@ -66,9 +66,13 @@ function Produits() {
                   <img
                     src={PRODUCT_IMAGES[i % PRODUCT_IMAGES.length]}
                     alt=""
+                    width={36}
+                    height={36}
+                    decoding="async"
                     className="h-9 w-9 rounded-full border-2 border-white/70 object-cover"
                     loading="lazy"
                   />
+
                   <p className="font-display text-lg">{p.name}</p>
                 </div>
                 <p className="text-sm font-semibold">{formatFcfa(p.price)}</p>
