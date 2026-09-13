@@ -145,7 +145,10 @@ function UsersTab() {
     const raw = window.prompt("Montant à ajouter (FCFA). Utilisez un nombre négatif pour retirer :");
     if (!raw) return;
     const amount = Number(raw.replace(/\s/g, "").replace(",", "."));
-    if (!Number.isFinite(amount) || amount === 0) return toast.error("Montant invalide");
+    if (!Number.isFinite(amount) || amount === 0) {
+      toast.error("Montant invalide");
+      return;
+    }
     setBusy(id);
     const { error } = await supabase.rpc("admin_add_funds", {
       p_user_id: id,
@@ -153,7 +156,10 @@ function UsersTab() {
       p_note: "Ajustement administrateur",
     });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Solde mis à jour");
     refresh();
   }
@@ -261,7 +267,10 @@ function TransactionsTab() {
       p_status: next,
     });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success(next === "completed" ? "Opération validée" : "Opération refusée");
     queryClient.invalidateQueries({ queryKey: ["admin-transactions"] });
     queryClient.invalidateQueries({ queryKey: ["admin-overview"] });
@@ -332,7 +341,10 @@ function ProductsTab() {
       p_product_id: id,
       p_active: active,
     });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success(active ? "Produit activé" : "Produit désactivé");
     queryClient.invalidateQueries({ queryKey: ["admin-products"] });
     queryClient.invalidateQueries({ queryKey: ["products"] });
