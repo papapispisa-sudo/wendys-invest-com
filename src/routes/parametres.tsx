@@ -23,6 +23,7 @@ export const Route = createFileRoute("/parametres")({
 
 function Parametres() {
   const { data: profile } = useProfile();
+  const { data: isAdmin } = useIsAdmin();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const country = COUNTRIES.find((c) => c.code === profile?.country);
