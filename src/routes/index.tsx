@@ -141,6 +141,10 @@ function AuthPage() {
         <img
           src={logo.url}
           alt="Logo Wendy's"
+          width={96}
+          height={96}
+          decoding="async"
+          fetchPriority="high"
           className="mx-auto h-24 w-24 rounded-2xl object-cover shadow-lg"
         />
         <h1 className="mt-4 text-3xl">Wendy's Invest</h1>
@@ -152,9 +156,13 @@ function AuthPage() {
       <img
         src={hero.url}
         alt="Restaurant Wendy's illuminé la nuit"
+        width={1280}
+        height={480}
+        decoding="async"
         className="h-44 w-full object-cover sm:h-56"
         loading="lazy"
       />
+
 
       <div className="mx-auto -mt-6 w-full max-w-md px-4">
         <div className="card-soft p-5">
