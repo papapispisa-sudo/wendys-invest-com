@@ -43,7 +43,7 @@ export const Route = createFileRoute("/")({
   }),
   head: () => ({
     links: [
-      { rel: "preload", as: "image", href: logo.url, fetchpriority: "high" },
+      { rel: "preload", as: "image", href: logo.url },
     ],
 
     meta: [
