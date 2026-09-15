@@ -14,6 +14,68 @@ export type Database = {
   }
   public: {
     Tables: {
+      bonus_code_uses: {
+        Row: {
+          code_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          code_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          code_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bonus_code_uses_code_id_fkey"
+            columns: ["code_id"]
+            isOneToOne: false
+            referencedRelation: "bonus_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bonus_codes: {
+        Row: {
+          active: boolean
+          amount: number
+          code: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          max_uses: number
+          uses: number
+        }
+        Insert: {
+          active?: boolean
+          amount: number
+          code: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          max_uses?: number
+          uses?: number
+        }
+        Update: {
+          active?: boolean
+          amount?: number
+          code?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          max_uses?: number
+          uses?: number
+        }
+        Relationships: []
+      }
       investments: {
         Row: {
           active: boolean
@@ -61,33 +123,66 @@ export type Database = {
           },
         ]
       }
+      product_types: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           active: boolean
+          category: string
           created_at: string
           daily_return: number
+          description: string | null
           duration_days: number
           id: string
+          image_url: string | null
           name: string
           price: number
           rank: number
         }
         Insert: {
           active?: boolean
+          category?: string
           created_at?: string
           daily_return: number
+          description?: string | null
           duration_days?: number
           id?: string
+          image_url?: string | null
           name: string
           price: number
           rank: number
         }
         Update: {
           active?: boolean
+          category?: string
           created_at?: string
           daily_return?: number
+          description?: string | null
           duration_days?: number
           id?: string
+          image_url?: string | null
           name?: string
           price?: number
           rank?: number
@@ -201,6 +296,92 @@ export type Database = {
         }
         Relationships: []
       }
+      wheel_prizes: {
+        Row: {
+          active: boolean
+          amount: number
+          created_at: string
+          id: string
+          label: string
+          weight: number
+        }
+        Insert: {
+          active?: boolean
+          amount?: number
+          created_at?: string
+          id?: string
+          label: string
+          weight?: number
+        }
+        Update: {
+          active?: boolean
+          amount?: number
+          created_at?: string
+          id?: string
+          label?: string
+          weight?: number
+        }
+        Relationships: []
+      }
+      wheel_settings: {
+        Row: {
+          active: boolean
+          daily_spins: number
+          difficulty: number
+          id: boolean
+          spin_cost: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          daily_spins?: number
+          difficulty?: number
+          id?: boolean
+          spin_cost?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          daily_spins?: number
+          difficulty?: number
+          id?: boolean
+          spin_cost?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      wheel_spins: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          prize_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          prize_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          prize_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wheel_spins_prize_id_fkey"
+            columns: ["prize_id"]
+            isOneToOne: false
+            referencedRelation: "wheel_prizes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -208,6 +389,36 @@ export type Database = {
     Functions: {
       admin_add_funds: {
         Args: { p_amount: number; p_note?: string; p_user_id: string }
+        Returns: undefined
+      }
+      admin_bonus_codes: {
+        Args: never
+        Returns: {
+          active: boolean
+          amount: number
+          code: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          max_uses: number
+          uses: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "bonus_codes"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      admin_delete_bonus_code: { Args: { p_id: string }; Returns: undefined }
+      admin_delete_product: { Args: { p_id: string }; Returns: undefined }
+      admin_delete_product_type: {
+        Args: { p_slug: string }
+        Returns: undefined
+      }
+      admin_delete_wheel_prize: { Args: { p_id: string }; Returns: undefined }
+      admin_grant_investment: {
+        Args: { p_product_id: string; p_user_id: string }
         Returns: undefined
       }
       admin_overview: {
@@ -222,6 +433,10 @@ export type Database = {
           total_withdrawals: number
           users_count: number
         }[]
+      }
+      admin_remove_investment: {
+        Args: { p_investment_id: string }
+        Returns: undefined
       }
       admin_set_product_active: {
         Args: { p_active: boolean; p_product_id: string }
@@ -246,6 +461,79 @@ export type Database = {
           user_phone: string
         }[]
       }
+      admin_update_wheel_settings: {
+        Args: {
+          p_active: boolean
+          p_daily_spins: number
+          p_difficulty: number
+          p_spin_cost: number
+        }
+        Returns: undefined
+      }
+      admin_upsert_bonus_code: {
+        Args: {
+          p_active: boolean
+          p_amount: number
+          p_code: string
+          p_expires_at: string
+          p_id: string
+          p_max_uses: number
+        }
+        Returns: undefined
+      }
+      admin_upsert_product: {
+        Args: {
+          p_active: boolean
+          p_category: string
+          p_daily_return: number
+          p_description: string
+          p_duration_days: number
+          p_id: string
+          p_image_url: string
+          p_name: string
+          p_price: number
+          p_rank: number
+        }
+        Returns: string
+      }
+      admin_upsert_product_type: {
+        Args: { p_label: string; p_slug: string; p_sort_order: number }
+        Returns: undefined
+      }
+      admin_upsert_wheel_prize: {
+        Args: {
+          p_active: boolean
+          p_amount: number
+          p_id: string
+          p_label: string
+          p_weight: number
+        }
+        Returns: undefined
+      }
+      admin_user_investments: {
+        Args: { p_user_id: string }
+        Returns: {
+          active: boolean
+          created_at: string
+          daily_return: number
+          days_paid: number
+          duration_days: number
+          id: string
+          price: number
+          product_name: string
+        }[]
+      }
+      admin_user_referrals: {
+        Args: { p_user_id: string }
+        Returns: {
+          balance: number
+          created_at: string
+          has_invested: boolean
+          id: string
+          level: number
+          phone: string
+        }[]
+      }
       admin_users: {
         Args: { p_search?: string }
         Returns: {
@@ -261,6 +549,23 @@ export type Database = {
           total_earned: number
         }[]
       }
+      admin_wheel_prizes: {
+        Args: never
+        Returns: {
+          active: boolean
+          amount: number
+          created_at: string
+          id: string
+          label: string
+          weight: number
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "wheel_prizes"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       claim_daily_bonus: { Args: never; Returns: undefined }
       create_deposit: {
         Args: { p_amount: number; p_method: string; p_phone: string }
@@ -275,6 +580,7 @@ export type Database = {
       }
       is_admin: { Args: never; Returns: boolean }
       purchase_product: { Args: { p_product_id: string }; Returns: undefined }
+      redeem_bonus_code: { Args: { p_code: string }; Returns: number }
       referral_stats: {
         Args: never
         Returns: {
@@ -287,7 +593,24 @@ export type Database = {
         Args: { p_amount: number; p_method: string; p_phone: string }
         Returns: undefined
       }
+      spin_wheel: {
+        Args: never
+        Returns: {
+          amount: number
+          label: string
+          prize_id: string
+        }[]
+      }
       sync_earnings: { Args: never; Returns: undefined }
+      wheel_status: {
+        Args: never
+        Returns: {
+          active: boolean
+          daily_spins: number
+          spin_cost: number
+          spins_left: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "user"
