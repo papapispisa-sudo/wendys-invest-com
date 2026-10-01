@@ -64,7 +64,7 @@ function Produits() {
               <div className="brand-gradient flex items-center justify-between px-4 py-2.5 text-primary-foreground">
                 <div className="flex items-center gap-2.5">
                   <img
-                    src={PRODUCT_IMAGES[i % PRODUCT_IMAGES.length]}
+                    src={p.image_url || PRODUCT_IMAGES[i % PRODUCT_IMAGES.length]}
                     alt=""
                     width={36}
                     height={36}
@@ -77,6 +77,9 @@ function Produits() {
                 </div>
                 <p className="text-sm font-semibold">{formatFcfa(p.price)}</p>
               </div>
+              {p.description && (
+                <p className="px-4 pt-3 text-xs text-muted-foreground">{p.description}</p>
+              )}
               <div className="grid grid-cols-3 gap-2 p-4 text-center text-xs">
                 <div>
                   <p className="text-muted-foreground">Par jour</p>
