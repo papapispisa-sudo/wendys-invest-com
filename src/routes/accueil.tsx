@@ -94,6 +94,17 @@ function Accueil() {
         </Button>
       </section>
 
+      <Link to="/roue" className="card-soft mt-3 flex items-center gap-3 p-4">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent text-primary">
+          <Gift className="h-5 w-5" />
+        </div>
+        <div className="flex-1">
+          <p className="font-semibold">Roue de la chance & codes bonus</p>
+          <p className="text-xs text-muted-foreground">Tentez votre chance chaque jour</p>
+        </div>
+        <span className="text-sm font-semibold text-primary">Jouer</span>
+      </Link>
+
       <section className="mt-5">
         <h2 className="mb-2 flex items-center gap-2 text-base">
           <TrendingUp className="h-4 w-4 text-primary" /> Mes produits actifs
