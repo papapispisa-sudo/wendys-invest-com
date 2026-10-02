@@ -331,7 +331,7 @@ function UsersTab() {
       p_note: sign === 1 ? "Crédit administrateur" : "Débit administrateur",
     });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Solde mis à jour");
     refresh();
   }
@@ -468,14 +468,14 @@ function UserDetail({ user, onClose }: { user: AdminUser; onClose: () => void })
   }
 
   async function grant() {
-    if (!productId) return toast.error("Choisissez un produit");
+    if (!productId) { toast.error("Choisissez un produit"); return; }
     setBusy(true);
     const { error } = await supabase.rpc("admin_grant_investment", {
       p_user_id: user.id,
       p_product_id: productId,
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Produit ajouté au compte");
     refresh();
   }
@@ -483,7 +483,7 @@ function UserDetail({ user, onClose }: { user: AdminUser; onClose: () => void })
   async function removeInvestment(id: string) {
     if (!window.confirm("Retirer ce produit du compte ?")) return;
     const { error } = await supabase.rpc("admin_remove_investment", { p_investment_id: id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Produit retiré");
     refresh();
   }
@@ -607,7 +607,7 @@ function TransactionsTab() {
     setBusy(id);
     const { error } = await supabase.rpc("admin_set_transaction_status", { p_id: id, p_status: next });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(next === "completed" ? "Opération validée" : "Opération refusée");
     queryClient.invalidateQueries({ queryKey: ["admin-transactions"] });
     queryClient.invalidateQueries({ queryKey: ["admin-overview"] });
@@ -733,7 +733,7 @@ function ProductsTab() {
       p_product_id: id,
       p_active: active,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(active ? "Produit activé" : "Produit désactivé");
     refresh();
   }
@@ -742,19 +742,19 @@ function ProductsTab() {
     if (!form) return;
     setBusy(true);
     const { error } = await supabase.rpc("admin_upsert_product", {
-      p_id: form.id,
+      p_id: form.id as string,
       p_name: form.name,
       p_price: Number(form.price) || 0,
       p_daily_return: Number(form.daily_return) || 0,
       p_duration_days: Number(form.duration_days) || 1,
       p_rank: Number(form.rank) || 0,
       p_category: form.category,
-      p_description: form.description || null,
-      p_image_url: form.image_url || null,
+      p_description: (form.description || null) as string,
+      p_image_url: (form.image_url || null) as string,
       p_active: form.active,
     });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(form.id ? "Produit modifié" : "Produit créé");
     setForm(null);
     refresh();
@@ -763,7 +763,7 @@ function ProductsTab() {
   async function del(id: string) {
     if (!window.confirm("Supprimer ce produit ?")) return;
     const { error } = await supabase.rpc("admin_delete_product", { p_id: id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Produit supprimé");
     refresh();
   }
@@ -967,13 +967,13 @@ function TypesTab() {
 
   async function add() {
     const s = (slug || label).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    if (!s || !label) return toast.error("Nom du type obligatoire");
+    if (!s || !label) { toast.error("Nom du type obligatoire"); return; }
     const { error } = await supabase.rpc("admin_upsert_product_type", {
       p_slug: s,
       p_label: label,
       p_sort_order: (types ?? []).length + 1,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Type enregistré");
     setLabel("");
     setSlug("");
@@ -983,7 +983,7 @@ function TypesTab() {
   async function del(s: string) {
     if (!window.confirm("Supprimer ce type ?")) return;
     const { error } = await supabase.rpc("admin_delete_product_type", { p_slug: s });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Type supprimé");
     refresh();
   }
@@ -1050,21 +1050,21 @@ function WheelTab() {
       p_daily_spins: Number(dailySpins) || 0,
       p_active: active ?? settings?.active ?? true,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Réglages enregistrés");
     refresh();
   }
 
   async function addPrize() {
-    if (!label) return toast.error("Nom du lot obligatoire");
+    if (!label) { toast.error("Nom du lot obligatoire"); return; }
     const { error } = await supabase.rpc("admin_upsert_wheel_prize", {
-      p_id: null,
+      p_id: null as unknown as string,
       p_label: label,
       p_amount: Number(amount) || 0,
       p_weight: Number(weight) || 1,
       p_active: true,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Lot ajouté");
     setLabel("");
     setAmount("");
@@ -1073,7 +1073,7 @@ function WheelTab() {
 
   async function delPrize(id: string) {
     const { error } = await supabase.rpc("admin_delete_wheel_prize", { p_id: id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     refresh();
   }
 
@@ -1163,16 +1163,16 @@ function CodesTab() {
   }
 
   async function add() {
-    if (!code || !amount) return toast.error("Code et montant obligatoires");
+    if (!code || !amount) { toast.error("Code et montant obligatoires"); return; }
     const { error } = await supabase.rpc("admin_upsert_bonus_code", {
-      p_id: null,
+      p_id: null as unknown as string,
       p_code: code,
       p_amount: Number(amount) || 0,
       p_max_uses: Number(maxUses) || 1,
-      p_expires_at: expires ? new Date(expires).toISOString() : null,
+      p_expires_at: (expires ? new Date(expires).toISOString() : null) as string,
       p_active: true,
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Code créé");
     setCode("");
     setAmount("");
@@ -1183,7 +1183,7 @@ function CodesTab() {
   async function del(id: string) {
     if (!window.confirm("Supprimer ce code ?")) return;
     const { error } = await supabase.rpc("admin_delete_bonus_code", { p_id: id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     refresh();
   }
 
