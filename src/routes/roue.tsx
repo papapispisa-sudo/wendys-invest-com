@@ -55,7 +55,7 @@ function RouePage() {
     const { data, error } = await supabase.rpc("spin_wheel");
     if (error) {
       setSpinning(false);
-      return toast.error(error.message);
+      { toast.error(error.message); return; }
     }
     const won = Array.isArray(data) ? data[0] : data;
     const idx = Math.max(0, list.findIndex((p) => p.id === won?.prize_id));
@@ -74,7 +74,7 @@ function RouePage() {
     setRedeeming(true);
     const { data, error } = await supabase.rpc("redeem_bonus_code", { p_code: code });
     setRedeeming(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(`Code accepté : ${formatFcfa(data as number)} ajoutés`);
     setCode("");
     queryClient.invalidateQueries();
