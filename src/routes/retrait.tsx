@@ -18,7 +18,7 @@ export const Route = createFileRoute("/retrait")({
       { title: "Retrait — Wendy's" },
       {
         name: "description",
-        content: "Retirez vos gains Wendy's dès 1000 FCFA, de 11H à 18H GMT, par Mobile Money.",
+        content: "Retirez vos gains Wendy's dès 1000 FCFA, de 10H à 17H GMT, par Mobile Money.",
       },
       { property: "og:title", content: "Retrait — Wendy's" },
       { property: "og:description", content: "Retrait rapide sur votre Mobile Money." },
@@ -74,7 +74,7 @@ function Retrait() {
         <Clock className={`h-5 w-5 ${open ? "text-success" : "text-primary"}`} />
         <p className="text-sm">
           {open ? "Guichet ouvert" : "Guichet fermé"} — retraits de{" "}
-          <span className="font-semibold">11H à 18H GMT</span>
+          <span className="font-semibold">10H à 17H GMT</span>
         </p>
       </div>
 

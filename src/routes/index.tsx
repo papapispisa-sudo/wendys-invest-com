@@ -10,6 +10,8 @@ import { COUNTRIES, phoneIdentity, normalizePhone } from "@/lib/wendys";
 import { useSession } from "@/hooks/useAccount";
 import logo from "@/assets/wendys-logo.jpg.asset.json";
 import hero from "@/assets/wendys-hero.jpg.asset.json";
+import facadeCity from "@/assets/wendys-facade-city.jpg.asset.json";
+import facadeSign from "@/assets/wendys-facade-sign.jpg.asset.json";
 
 type Search = { ref?: string | undefined };
 
@@ -20,7 +22,7 @@ const FAQ = [
   },
   {
     q: "Quand puis-je retirer mes gains ?",
-    a: "Les retraits sont possibles de 11h à 18h GMT, après l'achat d'au moins un produit. Le retrait minimum est de 1000 FCFA.",
+    a: "Les retraits sont possibles de 10h à 17h GMT, après l'achat d'au moins un produit. Le retrait minimum est de 1000 FCFA.",
   },
   {
     q: "Comment fonctionnent les produits ?",
@@ -262,8 +264,13 @@ function AuthPage() {
           ))}
         </div>
 
+        <section className="mt-5 grid grid-cols-2 gap-2" aria-label="Photos Wendy's">
+          <img src={facadeCity.url} alt="Façade Wendy's en ville" loading="lazy" decoding="async" width={735} height={489} className="aspect-[4/3] w-full rounded-lg object-cover" />
+          <img src={facadeSign.url} alt="Restaurant et enseigne Wendy's" loading="lazy" decoding="async" width={735} height={551} className="aspect-[4/3] w-full rounded-lg object-cover" />
+        </section>
+
         <section className="card-soft mt-4 p-5">
-          <h2 className="font-display text-xl text-primary">Avant-propos</h2>
+          <h2 className="font-handwritten text-4xl text-primary">Avant-propos</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Wendy's est une plateforme d'investissement pensée pour l'Afrique de l'Ouest. Notre
             mission est simple : permettre à chacun, quel que soit son budget, de faire fructifier
@@ -278,7 +285,7 @@ function AuthPage() {
         </section>
 
         <section className="mt-4 pb-10">
-          <h2 className="mb-3 font-display text-xl text-primary">Questions fréquentes</h2>
+          <h2 className="mb-3 font-handwritten text-4xl text-primary">Questions fréquentes</h2>
           <div className="space-y-2">
             {FAQ.map((item, i) => (
               <details key={i} className="card-soft group px-4 py-3">

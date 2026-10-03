@@ -39,7 +39,7 @@ export function phoneIdentity(countryCode: string, phone: string) {
 
 export function withdrawalWindowOpen(date = new Date()) {
   const h = date.getUTCHours();
-  return h >= 11 && h < 18;
+  return h >= 10 && h < 17;
 }
 
 export const TX_LABELS: Record<string, string> = {

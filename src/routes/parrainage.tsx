@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Copy, Share2, Users } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Copy, Share2, Users, History } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -99,6 +99,9 @@ function Parrainage() {
           </div>
         ))}
       </section>
+      <Link to="/historique-parrainages" className="card-soft mt-4 flex items-center gap-3 p-4 font-semibold text-primary">
+        <History className="h-5 w-5" /> Historique des parrainages
+      </Link>
     </AppShell>
   );
 }
