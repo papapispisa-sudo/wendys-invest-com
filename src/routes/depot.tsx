@@ -19,6 +19,8 @@ export const Route = createFileRoute("/depot")({
       { name: "description", content: "Rechargez votre compte Wendy's dès 2000 FCFA par Mobile Money." },
       { property: "og:title", content: "Dépôt Mobile Money — Wendy's" },
       { property: "og:description", content: "MTN, WAVE, Orange, MOOV, TMONEY et YAS acceptés." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Depot,
