@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Users } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { useTransactions } from "@/hooks/useAccount";
+import { useTransactionsByKind } from "@/hooks/useAccount";
 import { formatFcfa } from "@/lib/wendys";
 
 export const Route = createFileRoute("/historique-parrainages")({
@@ -18,8 +18,8 @@ export const Route = createFileRoute("/historique-parrainages")({
 });
 
 function HistoriqueParrainages() {
-  const { data, isPending, isError } = useTransactions(true, 100);
-  const rows = (data ?? []).filter((tx) => tx.kind === "referral");
+  const { data, isPending, isError } = useTransactionsByKind("referral");
+  const rows = data ?? [];
   return <AppShell title="Historique des parrainages">
     <Link to="/parrainage" className="mb-4 inline-flex items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-4 w-4" /> Retour</Link>
     <h1 className="mb-3 flex items-center gap-2 text-xl"><Users className="h-6 w-6 text-primary" /> Historique des parrainages</h1>

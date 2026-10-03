@@ -61,6 +61,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Inscription en 1 minute avec votre numéro. Bonus d'inscription de 1000 FCFA.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,

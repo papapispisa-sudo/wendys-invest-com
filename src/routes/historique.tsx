@@ -12,6 +12,8 @@ export const Route = createFileRoute("/historique")({
       { name: "description", content: "Toutes vos opérations Wendy's : dépôts, retraits, gains et bonus." },
       { property: "og:title", content: "Historique — Wendy's" },
       { property: "og:description", content: "Consultez le détail de vos opérations." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Historique,

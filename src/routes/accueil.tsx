@@ -19,6 +19,8 @@ export const Route = createFileRoute("/accueil")({
       { name: "description", content: "Solde, revenus quotidiens et bonus de votre compte Wendy's." },
       { property: "og:title", content: "Mon compte — Wendy's Invest" },
       { property: "og:description", content: "Suivez votre solde et vos revenus quotidiens." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Accueil,

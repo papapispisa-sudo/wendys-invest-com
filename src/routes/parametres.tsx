@@ -16,6 +16,8 @@ export const Route = createFileRoute("/parametres")({
       { name: "description", content: "Vos informations de compte et règles de dépôt et retrait Wendy's." },
       { property: "og:title", content: "Paramètres — Wendy's" },
       { property: "og:description", content: "Gérez votre compte Wendy's." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Parametres,

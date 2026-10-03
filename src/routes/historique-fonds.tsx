@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, HandCoins } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { useTransactions } from "@/hooks/useAccount";
+import { useTransactionsByKind } from "@/hooks/useAccount";
 import { STATUS_LABELS, TX_LABELS, formatFcfa } from "@/lib/wendys";
 
 export const Route = createFileRoute("/historique-fonds")({
@@ -18,8 +18,8 @@ export const Route = createFileRoute("/historique-fonds")({
 });
 
 function HistoriqueFonds() {
-  const { data, isPending, isError } = useTransactions(true, 100);
-  const rows = (data ?? []).filter((tx) => tx.kind === "deposit" || tx.kind === "withdrawal");
+  const { data, isPending, isError } = useTransactionsByKind("funds");
+  const rows = data ?? [];
   return <AppShell title="Historique des fonds">
     <Link to="/parametres" className="mb-4 inline-flex items-center gap-1 text-sm font-semibold text-primary"><ArrowLeft className="h-4 w-4" /> Retour</Link>
     <h1 className="mb-3 flex items-center gap-2 text-xl"><HandCoins className="h-6 w-6 text-primary" /> Historique des fonds</h1>

@@ -22,6 +22,8 @@ export const Route = createFileRoute("/retrait")({
       },
       { property: "og:title", content: "Retrait — Wendy's" },
       { property: "og:description", content: "Retrait rapide sur votre Mobile Money." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Retrait,

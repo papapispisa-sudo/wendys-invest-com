@@ -17,6 +17,8 @@ export const Route = createFileRoute("/parrainage")({
       },
       { property: "og:title", content: "Parrainage — Wendy's" },
       { property: "og:description", content: "Invitez vos amis et gagnez sur 3 niveaux." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Parrainage,
