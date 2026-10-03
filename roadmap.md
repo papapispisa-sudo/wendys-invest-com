@@ -1,3 +1,3 @@
-- [ ] Afficher les deux photos Wendy's et une écriture manuscrite sur les accueils.
-- [ ] Distinguer l'historique des fonds et ajouter l'historique des parrainages.
-- [ ] Appliquer la plage de retrait 10 h–17 h GMT partout et vérifier.
+- [x] Afficher les deux photos Wendy's et une écriture manuscrite sur les accueils.
+- [x] Distinguer l'historique des fonds et ajouter l'historique des parrainages.
+- [x] Appliquer la plage de retrait 10 h–17 h GMT partout et vérifier.

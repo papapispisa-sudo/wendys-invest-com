@@ -26,7 +26,7 @@ function HistoriqueFonds() {
     {isPending ? <p className="text-sm text-muted-foreground">Chargement…</p> : isError ? <p className="text-sm text-destructive">Impossible de charger l’historique.</p> : rows.length === 0 ? <p className="text-sm text-muted-foreground">Aucun dépôt ou retrait pour le moment.</p> :
       <div className="divide-y divide-border border-y border-border">{rows.map((tx) => <div key={tx.id} className="flex items-center justify-between gap-3 py-4 text-sm">
         <div><p className="font-semibold">{TX_LABELS[tx.kind]}</p><p className="text-xs text-muted-foreground">{new Date(tx.created_at).toLocaleString("fr-FR")} · {STATUS_LABELS[tx.status] ?? tx.status}{tx.method ? ` · ${tx.method}` : ""}</p></div>
-        <span className={`shrink-0 font-semibold ${tx.kind === "withdrawal" ? "text-muted-foreground" : "text-success"}`}>{tx.kind === "withdrawal" ? "−" : "+"}{formatFcfa(tx.amount)}</span>
+        <span className={`shrink-0 font-semibold ${tx.status === "completed" && tx.kind === "deposit" ? "text-success" : "text-muted-foreground"}`}>{tx.status === "completed" ? tx.kind === "withdrawal" ? "−" : "+" : ""}{formatFcfa(tx.amount)}</span>
       </div>)}</div>}
   </AppShell>;
 }
