@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowDownToLine, ArrowUpFromLine, Gift, TrendingUp, Wallet, History } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Gift, TrendingUp, Wallet, History, HandCoins, Users } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useInvestments, useProfile, useTransactions } from "@/hooks/useAccount";
 import { DAILY_BONUS, TX_LABELS, STATUS_LABELS, formatFcfa } from "@/lib/wendys";
+import facadeCity from "@/assets/wendys-facade-city.jpg.asset.json";
+import facadeSign from "@/assets/wendys-facade-sign.jpg.asset.json";
 
 export const Route = createFileRoute("/accueil")({
   ssr: false,
@@ -70,6 +72,13 @@ function Accueil() {
         </div>
       </section>
 
+      <section className="mt-4 grid grid-cols-2 gap-2" aria-label="Photos Wendy's">
+        <img src={facadeCity.url} alt="Façade Wendy's en ville" loading="lazy" decoding="async" width={735} height={489} className="aspect-[4/3] w-full rounded-lg object-cover" />
+        <img src={facadeSign.url} alt="Restaurant et enseigne Wendy's" loading="lazy" decoding="async" width={735} height={551} className="aspect-[4/3] w-full rounded-lg object-cover" />
+      </section>
+
+      <p className="mt-4 text-center font-handwritten text-4xl text-primary">Bienvenue chez Wendy's</p>
+
       <section className="mt-4 grid grid-cols-2 gap-3">
         <div className="card-soft p-4">
           <p className="text-xs text-muted-foreground">Revenu par jour</p>
@@ -104,6 +113,11 @@ function Accueil() {
         </div>
         <span className="text-sm font-semibold text-primary">Jouer</span>
       </Link>
+
+      <div className="mt-3 grid grid-cols-2 gap-3">
+        <Link to="/historique-fonds" className="flex items-center gap-2 border-b border-border py-3 text-sm font-semibold text-primary"><HandCoins className="h-5 w-5 shrink-0" /> Historique des fonds</Link>
+        <Link to="/historique-parrainages" className="flex items-center gap-2 border-b border-border py-3 text-sm font-semibold text-primary"><Users className="h-5 w-5 shrink-0" /> Parrainages</Link>
+      </div>
 
       <section className="mt-5">
         <h2 className="mb-2 flex items-center gap-2 text-base">
