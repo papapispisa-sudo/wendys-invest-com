@@ -14,6 +14,8 @@ import { Route as AccueilRouteImport } from './routes/accueil'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DepotRouteImport } from './routes/depot'
 import { Route as HistoriqueRouteImport } from './routes/historique'
+import { Route as HistoriqueFondsRouteImport } from './routes/historique-fonds'
+import { Route as HistoriqueParrainagesRouteImport } from './routes/historique-parrainages'
 import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as ParrainageRouteImport } from './routes/parrainage'
 import { Route as ProduitsRouteImport } from './routes/produits'
@@ -43,6 +45,16 @@ const DepotRoute = DepotRouteImport.update({
 const HistoriqueRoute = HistoriqueRouteImport.update({
   id: '/historique',
   path: '/historique',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoriqueFondsRoute = HistoriqueFondsRouteImport.update({
+  id: '/historique-fonds',
+  path: '/historique-fonds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoriqueParrainagesRoute = HistoriqueParrainagesRouteImport.update({
+  id: '/historique-parrainages',
+  path: '/historique-parrainages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ParametresRoute = ParametresRouteImport.update({
@@ -77,6 +89,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/depot': typeof DepotRoute
   '/historique': typeof HistoriqueRoute
+  '/historique-fonds': typeof HistoriqueFondsRoute
+  '/historique-parrainages': typeof HistoriqueParrainagesRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
@@ -89,6 +103,8 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/depot': typeof DepotRoute
   '/historique': typeof HistoriqueRoute
+  '/historique-fonds': typeof HistoriqueFondsRoute
+  '/historique-parrainages': typeof HistoriqueParrainagesRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
@@ -102,6 +118,8 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/depot': typeof DepotRoute
   '/historique': typeof HistoriqueRoute
+  '/historique-fonds': typeof HistoriqueFondsRoute
+  '/historique-parrainages': typeof HistoriqueParrainagesRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
@@ -116,6 +134,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/depot'
     | '/historique'
+    | '/historique-fonds'
+    | '/historique-parrainages'
     | '/parametres'
     | '/parrainage'
     | '/produits'
@@ -128,6 +148,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/depot'
     | '/historique'
+    | '/historique-fonds'
+    | '/historique-parrainages'
     | '/parametres'
     | '/parrainage'
     | '/produits'
@@ -140,6 +162,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/depot'
     | '/historique'
+    | '/historique-fonds'
+    | '/historique-parrainages'
     | '/parametres'
     | '/parrainage'
     | '/produits'
@@ -153,6 +177,8 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   DepotRoute: typeof DepotRoute
   HistoriqueRoute: typeof HistoriqueRoute
+  HistoriqueFondsRoute: typeof HistoriqueFondsRoute
+  HistoriqueParrainagesRoute: typeof HistoriqueParrainagesRoute
   ParametresRoute: typeof ParametresRoute
   ParrainageRoute: typeof ParrainageRoute
   ProduitsRoute: typeof ProduitsRoute
@@ -195,6 +221,20 @@ declare module '@tanstack/react-router' {
       path: '/historique'
       fullPath: '/historique'
       preLoaderRoute: typeof HistoriqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historique-fonds': {
+      id: '/historique-fonds'
+      path: '/historique-fonds'
+      fullPath: '/historique-fonds'
+      preLoaderRoute: typeof HistoriqueFondsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historique-parrainages': {
+      id: '/historique-parrainages'
+      path: '/historique-parrainages'
+      fullPath: '/historique-parrainages'
+      preLoaderRoute: typeof HistoriqueParrainagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parametres': {
@@ -241,6 +281,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   DepotRoute: DepotRoute,
   HistoriqueRoute: HistoriqueRoute,
+  HistoriqueFondsRoute: HistoriqueFondsRoute,
+  HistoriqueParrainagesRoute: HistoriqueParrainagesRoute,
   ParametresRoute: ParametresRoute,
   ParrainageRoute: ParrainageRoute,
   ProduitsRoute: ProduitsRoute,
