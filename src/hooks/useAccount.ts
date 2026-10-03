@@ -97,6 +97,21 @@ export function useTransactions(enabled = true, limit = 30) {
   });
 }
 
+export function useTransactionsByKind(kind: "referral" | "funds", limit = 100) {
+  return useQuery({
+    queryKey: ["transactions", kind, limit],
+    queryFn: async () => {
+      const base = supabase.from("transactions").select("*");
+      const filtered = kind === "funds"
+        ? base.in("kind", ["deposit", "withdrawal"])
+        : base.eq("kind", "referral");
+      const { data, error } = await filtered.order("created_at", { ascending: false }).limit(limit);
+      if (error) throw error;
+      return data;
+    },
+  });
+}
+
 export function useReferralStats(enabled = true) {
   return useQuery({
     queryKey: ["referral-stats"],

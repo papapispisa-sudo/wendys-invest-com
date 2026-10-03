@@ -40,6 +40,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-ring-offset-background: var(--background);
   --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
+  --font-handwritten: "Caveat", cursive;
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
 }
 

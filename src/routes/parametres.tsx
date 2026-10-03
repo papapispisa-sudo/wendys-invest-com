@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Clock, History, LogOut, Phone, ShieldCheck, Wallet } from "lucide-react";
+import { Clock, History, LogOut, Phone, ShieldCheck, Wallet, HandCoins, Users } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,6 +16,8 @@ export const Route = createFileRoute("/parametres")({
       { name: "description", content: "Vos informations de compte et règles de dépôt et retrait Wendy's." },
       { property: "og:title", content: "Paramètres — Wendy's" },
       { property: "og:description", content: "Gérez votre compte Wendy's." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Parametres,
@@ -78,6 +80,14 @@ function Parametres() {
           <History className="h-5 w-5 text-primary" />
           <span className="flex-1 font-semibold">Historique complet</span>
         </Link>
+        <Link to="/historique-fonds" className="card-soft flex items-center gap-3 p-4">
+          <HandCoins className="h-5 w-5 text-primary" />
+          <span className="flex-1 font-semibold">Historique des fonds</span>
+        </Link>
+        <Link to="/historique-parrainages" className="card-soft flex items-center gap-3 p-4">
+          <Users className="h-5 w-5 text-primary" />
+          <span className="flex-1 font-semibold">Historique des parrainages</span>
+        </Link>
         {isAdmin && (
           <Link to="/admin" className="card-soft flex items-center gap-3 p-4">
             <ShieldCheck className="h-5 w-5 text-primary" />
@@ -91,7 +101,7 @@ function Parametres() {
           <ShieldCheck className="h-4 w-4 text-primary" /> Règles de la plateforme
         </p>
         <p>• Dépôt minimum : {formatFcfa(MIN_DEPOSIT)}</p>
-        <p>• Retrait minimum : {formatFcfa(MIN_WITHDRAWAL)}, de 11H à 18H GMT</p>
+        <p>• Retrait minimum : {formatFcfa(MIN_WITHDRAWAL)}, de 10H à 17H GMT</p>
         <p>• Le retrait est possible après l'achat d'un produit</p>
         <p>• Parrainage : 30 % niveau 1, 3 % niveau 2, 2 % niveau 3</p>
       </section>

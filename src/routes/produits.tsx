@@ -27,6 +27,8 @@ export const Route = createFileRoute("/produits")({
       },
       { property: "og:title", content: "Produits d'investissement — Wendy's" },
       { property: "og:description", content: "Choisissez votre produit et gagnez chaque jour." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Produits,
