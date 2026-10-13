@@ -65,7 +65,8 @@ export const Route = createFileRoute("/admin")({
 const NAV = [
   { id: "resume", label: "Tableau de bord", icon: Gauge },
   { id: "users", label: "Utilisateurs", icon: Users },
-  { id: "tx", label: "Dépôts / Retraits", icon: Wallet },
+  { id: "deposits", label: "Dépôts", icon: ArrowDownCircle },
+  { id: "withdrawals", label: "Retraits", icon: ArrowUpCircle },
   { id: "products", label: "Produits", icon: Box },
   { id: "types", label: "Types de produits", icon: Layers },
   { id: "wheel", label: "Roue de la chance", icon: Gift },
@@ -180,7 +181,8 @@ function AdminPage() {
         <main className="mx-auto w-full max-w-6xl p-4 lg:p-6">
           {tab === "resume" && <Overview />}
           {tab === "users" && <UsersTab />}
-          {tab === "tx" && <TransactionsTab />}
+          {tab === "deposits" && <TransactionsTab key="d" kind="deposit" />}
+          {tab === "withdrawals" && <TransactionsTab key="w" kind="withdrawal" />}
           {tab === "products" && <ProductsTab />}
           {tab === "types" && <TypesTab />}
           {tab === "wheel" && <WheelTab />}
@@ -597,9 +599,10 @@ const STATUS_TABS = [
   { id: "failed", label: "Refusés" },
 ] as const;
 
-function TransactionsTab() {
+function TransactionsTab({ kind }: { kind: "deposit" | "withdrawal" }) {
   const [status, setStatus] = useState<string>("pending");
-  const { data: rows } = useAdminTransactions(status);
+  const { data: all } = useAdminTransactions(status);
+  const rows = (all ?? []).filter((t) => t.kind === kind);
   const queryClient = useQueryClient();
   const [busy, setBusy] = useState<string | null>(null);
 
