@@ -617,7 +617,7 @@ function TransactionsTab({ kind }: { kind: "deposit" | "withdrawal" }) {
   }
 
   return (
-    <Panel title="Dépôts et retraits">
+    <Panel title={kind === "deposit" ? "Dépôts" : "Retraits"}>
       <div className="mb-4 flex gap-2">
         {STATUS_TABS.map((s) => (
           <button
