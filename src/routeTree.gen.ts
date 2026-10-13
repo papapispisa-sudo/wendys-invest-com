@@ -16,6 +16,7 @@ import { Route as DepotRouteImport } from './routes/depot'
 import { Route as HistoriqueRouteImport } from './routes/historique'
 import { Route as HistoriqueFondsRouteImport } from './routes/historique-fonds'
 import { Route as HistoriqueParrainagesRouteImport } from './routes/historique-parrainages'
+import { Route as MesProduitsRouteImport } from './routes/mes-produits'
 import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as ParrainageRouteImport } from './routes/parrainage'
 import { Route as ProduitsRouteImport } from './routes/produits'
@@ -57,6 +58,11 @@ const HistoriqueParrainagesRoute = HistoriqueParrainagesRouteImport.update({
   path: '/historique-parrainages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MesProduitsRoute = MesProduitsRouteImport.update({
+  id: '/mes-produits',
+  path: '/mes-produits',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ParametresRoute = ParametresRouteImport.update({
   id: '/parametres',
   path: '/parametres',
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/historique': typeof HistoriqueRoute
   '/historique-fonds': typeof HistoriqueFondsRoute
   '/historique-parrainages': typeof HistoriqueParrainagesRoute
+  '/mes-produits': typeof MesProduitsRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/historique': typeof HistoriqueRoute
   '/historique-fonds': typeof HistoriqueFondsRoute
   '/historique-parrainages': typeof HistoriqueParrainagesRoute
+  '/mes-produits': typeof MesProduitsRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/historique': typeof HistoriqueRoute
   '/historique-fonds': typeof HistoriqueFondsRoute
   '/historique-parrainages': typeof HistoriqueParrainagesRoute
+  '/mes-produits': typeof MesProduitsRoute
   '/parametres': typeof ParametresRoute
   '/parrainage': typeof ParrainageRoute
   '/produits': typeof ProduitsRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/historique'
     | '/historique-fonds'
     | '/historique-parrainages'
+    | '/mes-produits'
     | '/parametres'
     | '/parrainage'
     | '/produits'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/historique'
     | '/historique-fonds'
     | '/historique-parrainages'
+    | '/mes-produits'
     | '/parametres'
     | '/parrainage'
     | '/produits'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/historique'
     | '/historique-fonds'
     | '/historique-parrainages'
+    | '/mes-produits'
     | '/parametres'
     | '/parrainage'
     | '/produits'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   HistoriqueRoute: typeof HistoriqueRoute
   HistoriqueFondsRoute: typeof HistoriqueFondsRoute
   HistoriqueParrainagesRoute: typeof HistoriqueParrainagesRoute
+  MesProduitsRoute: typeof MesProduitsRoute
   ParametresRoute: typeof ParametresRoute
   ParrainageRoute: typeof ParrainageRoute
   ProduitsRoute: typeof ProduitsRoute
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HistoriqueParrainagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mes-produits': {
+      id: '/mes-produits'
+      path: '/mes-produits'
+      fullPath: '/mes-produits'
+      preLoaderRoute: typeof MesProduitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/parametres': {
       id: '/parametres'
       path: '/parametres'
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoriqueRoute: HistoriqueRoute,
   HistoriqueFondsRoute: HistoriqueFondsRoute,
   HistoriqueParrainagesRoute: HistoriqueParrainagesRoute,
+  MesProduitsRoute: MesProduitsRoute,
   ParametresRoute: ParametresRoute,
   ParrainageRoute: ParrainageRoute,
   ProduitsRoute: ProduitsRoute,
