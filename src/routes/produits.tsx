@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
@@ -54,9 +55,17 @@ function Produits() {
 
   return (
     <AppShell title="Produits">
-      <p className="mb-3 text-sm text-muted-foreground">
-        Solde : <span className="font-semibold text-primary">{formatFcfa(profile?.balance)}</span>
-      </p>
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground">
+          Solde : <span className="font-semibold text-primary">{formatFcfa(profile?.balance)}</span>
+        </p>
+        <Link
+          to="/mes-produits"
+          className="flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-primary"
+        >
+          <TrendingUp className="h-4 w-4" /> Mes produits achetés
+        </Link>
+      </div>
 
       <div className="space-y-3">
         {(products ?? []).map((p, i) => {
