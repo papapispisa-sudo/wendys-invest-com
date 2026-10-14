@@ -119,6 +119,7 @@ function Accueil() {
       <div className="mt-3 grid grid-cols-2 gap-3">
         <Link to="/historique-fonds" className="flex items-center gap-2 border-b border-border py-3 text-sm font-semibold text-primary"><HandCoins className="h-5 w-5 shrink-0" /> Historique des fonds</Link>
         <Link to="/historique-parrainages" className="flex items-center gap-2 border-b border-border py-3 text-sm font-semibold text-primary"><Users className="h-5 w-5 shrink-0" /> Parrainages</Link>
+        <Link to="/mes-produits" className="col-span-2 flex items-center gap-2 border-b border-border py-3 text-sm font-semibold text-primary"><TrendingUp className="h-5 w-5 shrink-0" /> Mes produits achetés</Link>
       </div>
 
       <section className="mt-5">
