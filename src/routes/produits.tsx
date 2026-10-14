@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useProducts, useProfile } from "@/hooks/useAccount";
+import { useProducts, useProfile, useInvestments } from "@/hooks/useAccount";
 import { formatFcfa } from "@/lib/wendys";
 import store1 from "@/assets/wendys-store-1.jpg.asset.json";
 import store2 from "@/assets/wendys-store-2.jpg.asset.json";
@@ -38,6 +38,7 @@ export const Route = createFileRoute("/produits")({
 function Produits() {
   const { data: products } = useProducts();
   const { data: profile } = useProfile();
+  const { data: investments } = useInvestments();
   const queryClient = useQueryClient();
   const [pending, setPending] = useState<string | null>(null);
 
@@ -66,52 +67,62 @@ function Produits() {
           <TrendingUp className="h-4 w-4" /> Mes produits achetés
         </Link>
       </div>
+      <p className="mb-3 text-xs text-muted-foreground">
+        Chaque produit peut être acheté 2 fois maximum.
+      </p>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {(products ?? []).map((p, i) => {
           const total = Number(p.daily_return) * p.duration_days;
+          const bought = (investments ?? []).filter((inv) => inv.product_id === p.id).length;
+          const maxed = bought >= 2;
           return (
             <article key={p.id} className="card-soft overflow-hidden">
-              <div className="brand-gradient flex items-center justify-between px-4 py-2.5 text-primary-foreground">
-                <div className="flex items-center gap-2.5">
-                  <img
-                    src={p.image_url || PRODUCT_IMAGES[i % PRODUCT_IMAGES.length]}
-                    alt=""
-                    width={36}
-                    height={36}
-                    decoding="async"
-                    className="h-9 w-9 rounded-full border-2 border-white/70 object-cover"
-                    loading="lazy"
-                  />
-
+              <img
+                src={p.image_url || PRODUCT_IMAGES[i % PRODUCT_IMAGES.length]}
+                alt={p.name}
+                width={800}
+                height={800}
+                decoding="async"
+                loading="lazy"
+                className="aspect-square w-full object-cover"
+              />
+              <div className="p-4">
+                <div className="flex items-start justify-between gap-2">
                   <p className="font-display text-lg">{p.name}</p>
+                  {bought > 0 && (
+                    <span className="shrink-0 rounded-full bg-accent px-2.5 py-1 text-xs font-semibold text-primary">
+                      Acheté {bought}/2
+                    </span>
+                  )}
                 </div>
-                <p className="text-sm font-semibold">{formatFcfa(p.price)}</p>
-              </div>
-              {p.description && (
-                <p className="px-4 pt-3 text-xs text-muted-foreground">{p.description}</p>
-              )}
-              <div className="grid grid-cols-3 gap-2 p-4 text-center text-xs">
-                <div>
-                  <p className="text-muted-foreground">Par jour</p>
-                  <p className="font-display text-base text-primary">{formatFcfa(p.daily_return)}</p>
+                {p.description && (
+                  <p className="mt-1 text-xs text-muted-foreground">{p.description}</p>
+                )}
+                <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="rounded-lg bg-accent/60 p-2">
+                    <p className="text-muted-foreground">Prix</p>
+                    <p className="font-display text-sm text-primary">{formatFcfa(p.price)}</p>
+                  </div>
+                  <div className="rounded-lg bg-accent/60 p-2">
+                    <p className="text-muted-foreground">Durée</p>
+                    <p className="font-display text-sm text-primary">{p.duration_days} j</p>
+                  </div>
+                  <div className="rounded-lg bg-accent/60 p-2">
+                    <p className="text-muted-foreground">Fin de cycle</p>
+                    <p className="font-display text-sm text-primary">{formatFcfa(total)}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Durée</p>
-                  <p className="font-display text-base text-primary">{p.duration_days} j</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Total</p>
-                  <p className="font-display text-base text-primary">{formatFcfa(total)}</p>
-                </div>
-              </div>
-              <div className="px-4 pb-4">
                 <Button
-                  className="h-11 w-full font-bold"
-                  disabled={pending === p.id}
+                  className="mt-3 h-11 w-full font-bold"
+                  disabled={pending === p.id || maxed}
                   onClick={() => buy(p.id, p.name)}
                 >
-                  {pending === p.id ? "Achat..." : "Acheter"}
+                  {maxed
+                    ? "Maximum 2 achats atteint"
+                    : pending === p.id
+                      ? "Achat..."
+                      : "Acheter"}
                 </Button>
               </div>
             </article>
