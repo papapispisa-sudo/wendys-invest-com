@@ -20,8 +20,8 @@ export const Route = createFileRoute("/mes-produits")({
 });
 
 function MesProduits() {
-  const { data: session } = useSession();
-  const { data: list, isLoading } = useInvestments(!!session);
+  const { userId } = useSession();
+  const { data: list, isLoading } = useInvestments(!!userId);
   return (
     <AppShell title="Mes produits">
       <h1 className="mb-3 flex items-center gap-2 font-display text-xl">
