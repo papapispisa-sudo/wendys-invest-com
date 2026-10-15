@@ -99,10 +99,14 @@ function Produits() {
                 {p.description && (
                   <p className="mt-1 text-xs text-muted-foreground">{p.description}</p>
                 )}
-                <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                <div className="mt-3 grid grid-cols-2 gap-2 text-center text-xs">
                   <div className="rounded-lg bg-accent/60 p-2">
                     <p className="text-muted-foreground">Prix</p>
                     <p className="font-display text-sm text-primary">{formatFcfa(p.price)}</p>
+                  </div>
+                  <div className="rounded-lg bg-accent/60 p-2">
+                    <p className="text-muted-foreground">Revenu / jour</p>
+                    <p className="font-display text-sm text-primary">{formatFcfa(p.daily_return)}</p>
                   </div>
                   <div className="rounded-lg bg-accent/60 p-2">
                     <p className="text-muted-foreground">Durée</p>
