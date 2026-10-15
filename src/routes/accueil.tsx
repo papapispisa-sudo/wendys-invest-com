@@ -4,7 +4,7 @@ import { ArrowDownToLine, ArrowUpFromLine, Gift, TrendingUp, Wallet, History, Ha
 import { useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
-import { WelcomePopup } from "@/components/WelcomePopup";
+import { WelcomePopup, AnnouncementBar } from "@/components/WelcomePopup";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useInvestments, useProfile, useTransactions } from "@/hooks/useAccount";
@@ -55,6 +55,7 @@ function Accueil() {
   return (
     <AppShell title="Tableau de bord">
       <WelcomePopup />
+      <AnnouncementBar />
       <section className="brand-gradient rounded-2xl p-5 text-primary-foreground shadow-[var(--shadow-card)]">
         <p className="flex items-center gap-2 text-xs uppercase tracking-wide opacity-80">
           <Wallet className="h-4 w-4" /> Solde disponible
