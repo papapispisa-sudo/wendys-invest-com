@@ -29,6 +29,7 @@ export const Route = createFileRoute("/depot")({
 
 function Depot() {
   const { data: profile } = useProfile();
+  const { data: siteSettings } = useSiteSettings();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const country = COUNTRIES.find((c) => c.code === profile?.country) ?? COUNTRIES[0]!;
