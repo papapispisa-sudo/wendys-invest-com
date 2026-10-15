@@ -42,6 +42,7 @@ import {
 } from "@/hooks/useAdmin";
 import { adminDeleteUser, adminResetPassword } from "@/lib/admin.functions";
 import { formatFcfa } from "@/lib/wendys";
+import { SiteSettingsTab } from "@/components/SiteSettingsTab";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -71,6 +72,7 @@ const NAV = [
   { id: "types", label: "Types de produits", icon: Layers },
   { id: "wheel", label: "Roue de la chance", icon: Gift },
   { id: "codes", label: "Codes bonus", icon: Ticket },
+  { id: "site", label: "Paramètres du site", icon: Pencil },
 ] as const;
 
 type TabId = (typeof NAV)[number]["id"];
@@ -187,6 +189,7 @@ function AdminPage() {
           {tab === "types" && <TypesTab />}
           {tab === "wheel" && <WheelTab />}
           {tab === "codes" && <CodesTab />}
+          {tab === "site" && <SiteSettingsTab />}
         </main>
       </div>
     </div>

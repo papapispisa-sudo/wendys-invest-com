@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useAccount";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { COUNTRIES, MIN_DEPOSIT, formatFcfa } from "@/lib/wendys";
 
 export const Route = createFileRoute("/depot")({
@@ -36,7 +37,7 @@ function Depot() {
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [busy, setBusy] = useState(false);
 
-  const PAYMENT_URL = "https://monniz.com/p/wendys";
+  const PAYMENT_URL = siteSettings?.payment_url || "https://monniz.com/p/wendys";
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

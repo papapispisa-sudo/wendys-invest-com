@@ -239,6 +239,45 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          announcement: string
+          id: boolean
+          payment_url: string
+          popup_enabled: boolean
+          popup_message: string
+          popup_title: string
+          support_url: string
+          telegram_url: string
+          updated_at: string
+          whatsapp_url: string
+        }
+        Insert: {
+          announcement?: string
+          id?: boolean
+          payment_url?: string
+          popup_enabled?: boolean
+          popup_message?: string
+          popup_title?: string
+          support_url?: string
+          telegram_url?: string
+          updated_at?: string
+          whatsapp_url?: string
+        }
+        Update: {
+          announcement?: string
+          id?: boolean
+          payment_url?: string
+          popup_enabled?: boolean
+          popup_message?: string
+          popup_title?: string
+          support_url?: string
+          telegram_url?: string
+          updated_at?: string
+          whatsapp_url?: string
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
@@ -460,6 +499,19 @@ export type Database = {
           user_id: string
           user_phone: string
         }[]
+      }
+      admin_update_site_settings: {
+        Args: {
+          p_announcement: string
+          p_payment_url: string
+          p_popup_enabled: boolean
+          p_popup_message: string
+          p_popup_title: string
+          p_support_url: string
+          p_telegram_url: string
+          p_whatsapp_url: string
+        }
+        Returns: undefined
       }
       admin_update_wheel_settings: {
         Args: {
