@@ -11,3 +11,5 @@
 
 - Keep withdrawal-hour enforcement in the database function and mirror it in the client utility, because UI-only restrictions can be bypassed.
 - Keep fund and referral histories as separate filtered transaction queries, because a generic recent-activity limit can hide older matching entries.
+- Financial settings live in the public site-settings singleton and are enforced by database RPCs; client displays read the same settings and refresh periodically to keep admin changes consistent.
+- Referral details are returned through an authenticated, caller-scoped SQL function projecting only descendant phone, country and aggregate totals; never grant broad profile or transaction reads to sponsors.

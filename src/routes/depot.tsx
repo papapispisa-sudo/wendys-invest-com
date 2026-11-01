@@ -9,15 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useAccount";
-import { useSiteSettings } from "@/hooks/useSiteSettings";
-import { COUNTRIES, MIN_DEPOSIT, formatFcfa } from "@/lib/wendys";
+import { useFinanceSettings } from "@/hooks/useSiteSettings";
+import { COUNTRIES, formatFcfa } from "@/lib/wendys";
 
 export const Route = createFileRoute("/depot")({
   ssr: false,
   head: () => ({
     meta: [
       { title: "Dépôt Mobile Money — Wendy's" },
-      { name: "description", content: "Rechargez votre compte Wendy's dès 2000 FCFA par Mobile Money." },
+      { name: "description", content: "Rechargez votre compte Wendy's par Mobile Money." },
       { property: "og:title", content: "Dépôt Mobile Money — Wendy's" },
       { property: "og:description", content: "MTN, WAVE, Orange, MOOV, TMONEY et YAS acceptés." },
       { property: "og:type", content: "website" },
@@ -29,12 +29,12 @@ export const Route = createFileRoute("/depot")({
 
 function Depot() {
   const { data: profile } = useProfile();
-  const { data: siteSettings } = useSiteSettings();
+  const { data: siteSettings, settings, isError } = useFinanceSettings();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const country = COUNTRIES.find((c) => c.code === profile?.country) ?? COUNTRIES[0]!;
+  const country = COUNTRIES.find((c) => c.code === profile?.country) ?? COUNTRIES[0];
   const [amount, setAmount] = useState("2000");
-  const [method, setMethod] = useState(country.operators[0]!);
+  const [method, setMethod] = useState(country?.operators[0] ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [busy, setBusy] = useState(false);
 
@@ -43,8 +43,9 @@ function Depot() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const value = Number(amount);
-    if (!value || value < MIN_DEPOSIT) {
-      toast.error(`Le dépôt minimum est de ${formatFcfa(MIN_DEPOSIT)}`);
+    if (!siteSettings || isError) { toast.error("Réglages indisponibles, réessayez."); return; }
+    if (!value || value < settings.min_deposit) {
+      toast.error(`Le dépôt minimum est de ${formatFcfa(settings.min_deposit)}`);
       return;
     }
     setBusy(true);
@@ -84,13 +85,13 @@ function Depot() {
             onChange={(e) => setAmount(e.target.value.replace(/\D/g, ""))}
             className="h-11"
           />
-          <p className="text-xs text-muted-foreground">Minimum {formatFcfa(MIN_DEPOSIT)}</p>
+          <p className="text-xs text-muted-foreground">Minimum {formatFcfa(settings.min_deposit)}</p>
         </div>
 
         <div className="space-y-1.5">
           <Label>Moyen de paiement</Label>
           <div className="grid grid-cols-3 gap-2">
-            {country.operators.map((op) => (
+            {country?.operators.map((op) => (
               <button
                 type="button"
                 key={op}
@@ -106,7 +107,7 @@ function Depot() {
             ))}
           </div>
           <p className="text-xs text-muted-foreground">
-            {country.flag} {country.name}
+            {country?.flag} {country?.name}
           </p>
         </div>
 
@@ -131,7 +132,7 @@ function Depot() {
           </p>
         </div>
 
-        <Button type="submit" disabled={busy} className="h-12 w-full font-bold">
+        <Button type="submit" disabled={busy || !siteSettings || isError} className="h-12 w-full font-bold">
           {busy ? "Envoi..." : "Valider et payer avec Monniz"}
         </Button>
       </form>
