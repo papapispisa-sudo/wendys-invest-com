@@ -1,3 +1,6 @@
 - [x] Afficher les deux photos Wendy's et une écriture manuscrite sur les accueils.
 - [x] Distinguer l'historique des fonds et ajouter l'historique des parrainages.
 - [x] Appliquer la plage de retrait 10 h–17 h GMT partout et vérifier.
+- [ ] Afficher les coordonnées, investissements et retraits cumulés des filleuls.
+- [ ] Ajouter les réglages financiers administrateur et les appliquer côté site et base.
+- [ ] Vérifier les règles et les parcours connectés.
