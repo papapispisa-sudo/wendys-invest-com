@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { FinancialSettings } from "@/components/FinancialSettings";
 
 export function SiteSettingsTab() {
   const { data } = useSiteSettings();
@@ -75,6 +76,7 @@ export function SiteSettingsTab() {
         {field("payment_url", "Lien de paiement des dépôts", "https://monniz.com/p/...")}
       </section>
       <Button onClick={save} disabled={busy} className="w-full">{busy ? "Enregistrement..." : "Enregistrer"}</Button>
+      <FinancialSettings />
     </div>
   );
 }

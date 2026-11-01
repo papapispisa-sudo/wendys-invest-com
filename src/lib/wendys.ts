@@ -37,9 +37,9 @@ export function phoneIdentity(countryCode: string, phone: string) {
   return `${countryCode.toLowerCase()}${normalizePhone(phone)}@wendys.invest`;
 }
 
-export function withdrawalWindowOpen(date = new Date()) {
+export function withdrawalWindowOpen(date = new Date(), startHour = 10, endHour = 17) {
   const h = date.getUTCHours();
-  return h >= 10 && h < 17;
+  return h >= startHour && h < endHour;
 }
 
 export const TX_LABELS: Record<string, string> = {
