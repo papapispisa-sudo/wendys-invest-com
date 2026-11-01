@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Clock } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useAccount";
-import { COUNTRIES, MIN_WITHDRAWAL, formatFcfa, withdrawalWindowOpen } from "@/lib/wendys";
+import { COUNTRIES, formatFcfa, withdrawalWindowOpen } from "@/lib/wendys";
+import { useFinanceSettings } from "@/hooks/useSiteSettings";
 
 export const Route = createFileRoute("/retrait")({
   ssr: false,
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/retrait")({
       { title: "Retrait — Wendy's" },
       {
         name: "description",
-        content: "Retirez vos gains Wendy's dès 1000 FCFA, de 10H à 17H GMT, par Mobile Money.",
+        content: "Retirez vos gains Wendy's par Mobile Money selon les horaires du guichet.",
       },
       { property: "og:title", content: "Retrait — Wendy's" },
       { property: "og:description", content: "Retrait rapide sur votre Mobile Money." },
@@ -31,20 +32,25 @@ export const Route = createFileRoute("/retrait")({
 
 function Retrait() {
   const { data: profile } = useProfile();
+  const { data: siteSettings, settings, isError } = useFinanceSettings();
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => { const timer = setInterval(() => setNow(new Date()), 15000); return () => clearInterval(timer); }, []);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const country = COUNTRIES.find((c) => c.code === profile?.country) ?? COUNTRIES[0]!;
+  const country = COUNTRIES.find((c) => c.code === profile?.country) ?? COUNTRIES[0];
   const [amount, setAmount] = useState("1000");
-  const [method, setMethod] = useState(country.operators[0]!);
+  const [method, setMethod] = useState(country?.operators[0] ?? "");
   const [phone, setPhone] = useState(profile?.phone ?? "");
   const [busy, setBusy] = useState(false);
-  const open = withdrawalWindowOpen();
+  const open = withdrawalWindowOpen(now, settings.withdrawal_start_hour, settings.withdrawal_end_hour);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const value = Number(amount);
-    if (!value || value < MIN_WITHDRAWAL) {
-      toast.error(`Le retrait minimum est de ${formatFcfa(MIN_WITHDRAWAL)}`);
+    if (!siteSettings || isError) { toast.error("Réglages indisponibles, réessayez."); return; }
+    if (!withdrawalWindowOpen(new Date(), settings.withdrawal_start_hour, settings.withdrawal_end_hour)) { toast.error("Guichet fermé"); return; }
+    if (!value || value < settings.min_withdrawal) {
+      toast.error(`Le retrait minimum est de ${formatFcfa(settings.min_withdrawal)}`);
       return;
     }
     setBusy(true);
@@ -76,7 +82,7 @@ function Retrait() {
         <Clock className={`h-5 w-5 ${open ? "text-success" : "text-primary"}`} />
         <p className="text-sm">
           {open ? "Guichet ouvert" : "Guichet fermé"} — retraits de{" "}
-          <span className="font-semibold">10H à 17H GMT</span>
+          <span className="font-semibold">{settings.withdrawal_start_hour}H à {settings.withdrawal_end_hour}H GMT</span>
         </p>
       </div>
 
@@ -101,13 +107,13 @@ function Retrait() {
             onChange={(e) => setAmount(e.target.value.replace(/\D/g, ""))}
             className="h-11"
           />
-          <p className="text-xs text-muted-foreground">Minimum {formatFcfa(MIN_WITHDRAWAL)}</p>
+          <p className="text-xs text-muted-foreground">Minimum {formatFcfa(settings.min_withdrawal)}</p>
         </div>
 
         <div className="space-y-1.5">
           <Label>Recevoir sur</Label>
           <div className="grid grid-cols-3 gap-2">
-            {country.operators.map((op) => (
+            {country?.operators.map((op) => (
               <button
                 type="button"
                 key={op}
@@ -137,7 +143,7 @@ function Retrait() {
 
         <Button
           type="submit"
-          disabled={busy || !open || !profile?.has_invested}
+          disabled={busy || !open || !profile?.has_invested || !siteSettings || isError}
           className="h-12 w-full font-bold"
         >
           {busy ? "Envoi..." : "Demander le retrait"}

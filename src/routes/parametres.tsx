@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/useAccount";
 import { useIsAdmin } from "@/hooks/useAdmin";
-import { COUNTRIES, MIN_DEPOSIT, MIN_WITHDRAWAL, formatFcfa } from "@/lib/wendys";
+import { COUNTRIES, formatFcfa } from "@/lib/wendys";
+import { useFinanceSettings } from "@/hooks/useSiteSettings";
 
 export const Route = createFileRoute("/parametres")({
   ssr: false,
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/parametres")({
 });
 
 function Parametres() {
+  const { settings } = useFinanceSettings();
   const { data: profile } = useProfile();
   const { data: isAdmin } = useIsAdmin();
   const navigate = useNavigate();
@@ -69,12 +71,12 @@ function Parametres() {
         <Link to="/depot" className="card-soft flex items-center gap-3 p-4">
           <Wallet className="h-5 w-5 text-primary" />
           <span className="flex-1 font-semibold">Effectuer un dépôt</span>
-          <span className="text-xs text-muted-foreground">min. {formatFcfa(MIN_DEPOSIT)}</span>
+          <span className="text-xs text-muted-foreground">min. {formatFcfa(settings.min_deposit)}</span>
         </Link>
         <Link to="/retrait" className="card-soft flex items-center gap-3 p-4">
           <Clock className="h-5 w-5 text-primary" />
           <span className="flex-1 font-semibold">Demander un retrait</span>
-          <span className="text-xs text-muted-foreground">min. {formatFcfa(MIN_WITHDRAWAL)}</span>
+          <span className="text-xs text-muted-foreground">min. {formatFcfa(settings.min_withdrawal)}</span>
         </Link>
         <Link to="/historique" className="card-soft flex items-center gap-3 p-4">
           <History className="h-5 w-5 text-primary" />
@@ -100,10 +102,10 @@ function Parametres() {
         <p className="flex items-center gap-2 font-semibold text-foreground">
           <ShieldCheck className="h-4 w-4 text-primary" /> Règles de la plateforme
         </p>
-        <p>• Dépôt minimum : {formatFcfa(MIN_DEPOSIT)}</p>
-        <p>• Retrait minimum : {formatFcfa(MIN_WITHDRAWAL)}, de 10H à 17H GMT</p>
+        <p>• Dépôt minimum : {formatFcfa(settings.min_deposit)}</p>
+        <p>• Retrait minimum : {formatFcfa(settings.min_withdrawal)}, de {settings.withdrawal_start_hour}H à {settings.withdrawal_end_hour}H GMT</p>
         <p>• Le retrait est possible après l'achat d'un produit</p>
-        <p>• Parrainage : 30 % niveau 1, 3 % niveau 2, 2 % niveau 3</p>
+        <p>• Parrainage : {settings.referral_rate_1} % niveau 1, {settings.referral_rate_2} % niveau 2, {settings.referral_rate_3} % niveau 3</p>
       </section>
 
       <Button variant="outline" className="mt-4 h-11 w-full gap-2" onClick={signOut}>

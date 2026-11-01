@@ -8,7 +8,8 @@ import { WelcomePopup, AnnouncementBar } from "@/components/WelcomePopup";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useInvestments, useProfile, useTransactions } from "@/hooks/useAccount";
-import { DAILY_BONUS, TX_LABELS, STATUS_LABELS, formatFcfa } from "@/lib/wendys";
+import { TX_LABELS, STATUS_LABELS, formatFcfa } from "@/lib/wendys";
+import { useFinanceSettings } from "@/hooks/useSiteSettings";
 import facadeCity from "@/assets/wendys-facade-city.jpg.asset.json";
 import facadeSign from "@/assets/wendys-facade-sign.jpg.asset.json";
 
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/accueil")({
 });
 
 function Accueil() {
+  const { data: siteSettings, settings } = useFinanceSettings();
   const { data: profile } = useProfile();
   const { data: investments } = useInvestments();
   const { data: transactions } = useTransactions(true, 8);
@@ -48,7 +50,7 @@ function Accueil() {
       toast.error(error.message);
       return;
     }
-    toast.success(`Bonus de ${formatFcfa(DAILY_BONUS)} ajouté !`);
+    toast.success("Bonus quotidien ajouté !");
     queryClient.invalidateQueries();
   }
 
@@ -101,9 +103,9 @@ function Accueil() {
         </div>
         <div className="flex-1">
           <p className="font-semibold">Bonus quotidien</p>
-          <p className="text-xs text-muted-foreground">{formatFcfa(DAILY_BONUS)} chaque jour</p>
+          <p className="text-xs text-muted-foreground">{formatFcfa(settings.daily_bonus)} chaque jour</p>
         </div>
-        <Button size="sm" disabled={busy || bonusClaimed} onClick={claimBonus}>
+        <Button size="sm" disabled={busy || bonusClaimed || !siteSettings} onClick={claimBonus}>
           {bonusClaimed ? "Reçu" : "Réclamer"}
         </Button>
       </section>
