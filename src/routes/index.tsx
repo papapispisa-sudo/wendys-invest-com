@@ -6,7 +6,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { COUNTRIES, phoneIdentity, normalizePhone } from "@/lib/wendys";
+import { COUNTRIES, phoneIdentity, normalizePhone, formatFcfa } from "@/lib/wendys";
+import { useFinanceSettings } from "@/hooks/useSiteSettings";
+import type { FinanceSettings } from "@/lib/finance";
 import { useSession } from "@/hooks/useAccount";
 import logo from "@/assets/wendys-logo.jpg.asset.json";
 import hero from "@/assets/wendys-hero.jpg.asset.json";
@@ -15,14 +17,14 @@ import facadeSign from "@/assets/wendys-facade-sign.jpg.asset.json";
 
 type Search = { ref?: string | undefined };
 
-const FAQ = [
+const getFAQ = (s: FinanceSettings) => [
   {
     q: "Quel est le dépôt minimum ?",
-    a: "Le dépôt minimum est de 2000 FCFA, via MTN, WAVE, Orange, MOOV, TMONEY ou YAS selon votre pays.",
+    a: `Le dépôt minimum est de ${formatFcfa(s.min_deposit)}, via MTN, WAVE, Orange, MOOV, TMONEY ou YAS selon votre pays.`,
   },
   {
     q: "Quand puis-je retirer mes gains ?",
-    a: "Les retraits sont possibles de 10h à 17h GMT, après l'achat d'au moins un produit. Le retrait minimum est de 1000 FCFA.",
+    a: `Les retraits sont possibles de ${s.withdrawal_start_hour}h à ${s.withdrawal_end_hour}h GMT, après l'achat d'au moins un produit. Le retrait minimum est de ${formatFcfa(s.min_withdrawal)}.`,
   },
   {
     q: "Comment fonctionnent les produits ?",
@@ -30,11 +32,11 @@ const FAQ = [
   },
   {
     q: "Comment fonctionne le parrainage ?",
-    a: "Invitez vos amis avec votre code : vous gagnez 30 % au niveau 1, 3 % au niveau 2 et 2 % au niveau 3 sur leurs achats de produits.",
+    a: `Invitez vos amis avec votre code : vous gagnez ${s.referral_rate_1} % au niveau 1, ${s.referral_rate_2} % au niveau 2 et ${s.referral_rate_3} % au niveau 3 sur leurs achats de produits.`,
   },
   {
     q: "Quels bonus sont offerts ?",
-    a: "Vous recevez 1000 FCFA à l'inscription et un bonus quotidien de 125 FCFA chaque jour de connexion.",
+    a: `Vous recevez ${formatFcfa(s.signup_bonus)} à l'inscription et un bonus quotidien de ${formatFcfa(s.daily_bonus)} à réclamer chaque jour.`,
   },
 ];
 
@@ -54,26 +56,29 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Wendy's : plateforme d'investissement en Afrique de l'Ouest. Dépôt dès 2000 FCFA, revenus quotidiens et parrainage sur 3 niveaux.",
+          "Wendy's : plateforme d'investissement en Afrique de l'Ouest, revenus quotidiens et parrainage sur 3 niveaux.",
       },
       { property: "og:title", content: "Wendy's — Investissez et gagnez chaque jour" },
       {
         property: "og:description",
-        content: "Inscription en 1 minute avec votre numéro. Bonus d'inscription de 1000 FCFA.",
+        content: "Inscrivez-vous avec votre numéro et découvrez les produits Wendy's.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:image", content: hero.url },
+      { name: "twitter:image", content: hero.url },
     ],
   }),
   component: AuthPage,
 });
 
 function AuthPage() {
+  const { settings } = useFinanceSettings();
   const { ref } = useSearch({ from: "/" });
   const { userId, loading } = useSession();
   const navigate = useNavigate();
   const [mode, setMode] = useState<"login" | "signup">("signup");
-  const [country, setCountry] = useState(COUNTRIES[0]!.code);
+  const [country, setCountry] = useState(COUNTRIES[0]?.code ?? "CI");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [invite, setInvite] = useState(ref ?? "");
@@ -118,7 +123,7 @@ function AuthPage() {
           },
         });
         if (error) throw error;
-        toast.success("Compte créé ! Bonus de 1000 FCFA offert 🎉");
+        toast.success("Compte créé ! Bienvenue 🎉");
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -153,7 +158,7 @@ function AuthPage() {
         />
         <h1 className="mt-4 text-3xl">Wendy's Invest</h1>
         <p className="mt-1 text-sm opacity-90">
-          Investissez dès 2000 FCFA et recevez vos revenus chaque jour.
+          Découvrez nos produits et recevez vos revenus chaque jour.
         </p>
       </div>
 
@@ -255,11 +260,11 @@ function AuthPage() {
 
         <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
           {[
-            ["1000 FCFA", "Bonus d'inscription"],
-            ["125 FCFA", "Bonus quotidien"],
-            ["30 %", "Parrainage niveau 1"],
+            [formatFcfa(settings.signup_bonus), "Bonus d'inscription"],
+            [formatFcfa(settings.daily_bonus), "Bonus quotidien"],
+            [`${settings.referral_rate_1} %`, "Parrainage niveau 1"],
           ].map(([big, small]) => (
-            <div key={big} className="card-soft px-2 py-3">
+            <div key={small} className="card-soft px-2 py-3">
               <p className="font-display text-base text-primary">{big}</p>
               <p className="text-muted-foreground">{small}</p>
             </div>
@@ -276,7 +281,7 @@ function AuthPage() {
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
             Wendy's est une plateforme d'investissement pensée pour l'Afrique de l'Ouest. Notre
             mission est simple : permettre à chacun, quel que soit son budget, de faire fructifier
-            son argent au quotidien. Avec un dépôt minimum de seulement 2000 FCFA et des paiements
+            son argent au quotidien. Avec un dépôt minimum de {formatFcfa(settings.min_deposit)} et des paiements
             mobiles adaptés à votre pays (MTN, WAVE, Orange, MOOV, TMONEY, YAS), vous investissez en
             toute simplicité et suivez vos revenus jour après jour.
           </p>
@@ -289,7 +294,7 @@ function AuthPage() {
         <section className="mt-4 pb-10">
           <h2 className="mb-3 font-handwritten text-4xl text-primary">Questions fréquentes</h2>
           <div className="space-y-2">
-            {FAQ.map((item, i) => (
+            {getFAQ(settings).map((item, i) => (
               <details key={i} className="card-soft group px-4 py-3">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold">
                   {item.q}

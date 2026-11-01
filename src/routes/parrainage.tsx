@@ -3,8 +3,9 @@ import { Copy, Share2, Users, History } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
-import { useProfile, useReferralStats } from "@/hooks/useAccount";
-import { formatFcfa } from "@/lib/wendys";
+import { useProfile, useReferralStats, useReferralDetails } from "@/hooks/useAccount";
+import { formatFcfa, countryByCode } from "@/lib/wendys";
+import { useFinanceSettings } from "@/hooks/useSiteSettings";
 
 export const Route = createFileRoute("/parrainage")({
   ssr: false,
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/parrainage")({
       { title: "Parrainage — Wendy's" },
       {
         name: "description",
-        content: "Gagnez 30 %, 3 % et 2 % de commission sur les achats de vos filleuls Wendy's.",
+        content: "Suivez vos filleuls Wendy's, leurs investissements et vos commissions sur trois niveaux.",
       },
       { property: "og:title", content: "Parrainage — Wendy's" },
       { property: "og:description", content: "Invitez vos amis et gagnez sur 3 niveaux." },
@@ -25,6 +26,8 @@ export const Route = createFileRoute("/parrainage")({
 });
 
 function Parrainage() {
+  const { settings } = useFinanceSettings();
+  const { data: referrals, isPending, isError, refetch } = useReferralDetails();
   const { data: profile } = useProfile();
   const { data: stats } = useReferralStats();
 
@@ -85,9 +88,9 @@ function Parrainage() {
 
       <section className="mt-4 space-y-3">
         {[
-          { level: "Niveau 1", rate: "30 %", count: stats?.level1 ?? 0 },
-          { level: "Niveau 2", rate: "3 %", count: stats?.level2 ?? 0 },
-          { level: "Niveau 3", rate: "2 %", count: stats?.level3 ?? 0 },
+          { level: "Niveau 1", rate: `${settings.referral_rate_1} %`, count: stats?.level1 ?? 0 },
+          { level: "Niveau 2", rate: `${settings.referral_rate_2} %`, count: stats?.level2 ?? 0 },
+          { level: "Niveau 3", rate: `${settings.referral_rate_3} %`, count: stats?.level3 ?? 0 },
         ].map((row) => (
           <div key={row.level} className="card-soft flex items-center gap-3 p-4">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-primary">
@@ -100,6 +103,23 @@ function Parrainage() {
             <p className="font-display text-xl text-primary">{row.count}</p>
           </div>
         ))}
+      </section>
+      <section className="mt-6 space-y-3">
+        <h2 className="font-bold">Mes filleuls</h2>
+        {isPending && <p className="text-sm text-muted-foreground">Chargement des filleuls...</p>}
+        {isError && <div className="text-sm text-destructive">Impossible de charger les filleuls. <Button variant="outline" size="sm" onClick={() => refetch()}>Réessayer</Button></div>}
+        {!isPending && !isError && !referrals?.length && <p className="text-sm text-muted-foreground">Aucun filleul pour le moment.</p>}
+        {referrals?.map((r) => {
+          const country = countryByCode(r.country);
+          return <article key={r.user_id} className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-wrap items-center justify-between gap-2"><p className="font-semibold">{r.phone || "Numéro indisponible"}</p><span className="text-xs text-primary">Niveau {r.level}</span></div>
+            <p className="mt-1 text-sm text-muted-foreground">{country?.flag} {country?.name ?? r.country}</p>
+            <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
+              <div><dt className="text-muted-foreground">Total investi</dt><dd className="font-semibold">{formatFcfa(r.total_invested)}</dd></div>
+              <div><dt className="text-muted-foreground">Retraits cumulés validés</dt><dd className="font-semibold">{formatFcfa(r.total_withdrawn)}</dd></div>
+            </dl>
+          </article>;
+        })}
       </section>
       <Link to="/historique-parrainages" className="card-soft mt-4 flex items-center gap-3 p-4 font-semibold text-primary">
         <History className="h-5 w-5" /> Historique des parrainages

@@ -128,3 +128,14 @@ export function useReferralStats(enabled = true) {
     },
   });
 }
+
+export function useReferralDetails() {
+  return useQuery({
+    queryKey: ["referral-details"],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("referral_details");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
