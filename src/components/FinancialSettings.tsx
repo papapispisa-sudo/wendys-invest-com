@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -18,9 +18,13 @@ export function FinancialSettings() {
   const { data, isError } = useFinanceSettings();
   const [form, setForm] = useState<Record<keyof FinanceSettings, string>>(() => Object.fromEntries(fields.map(([key]) => [key, String(DEFAULT_FINANCE[key])])) as Record<keyof FinanceSettings, string>);
   const [busy, setBusy] = useState(false);
+  const initialized = useRef(false);
   const qc = useQueryClient();
   useEffect(() => {
-    if (data) setForm(Object.fromEntries(fields.map(([key]) => [key, String(data[key])])) as Record<keyof FinanceSettings, string>);
+    if (data && !initialized.current) {
+      setForm(Object.fromEntries(fields.map(([key]) => [key, String(data[key])])) as Record<keyof FinanceSettings, string>);
+      initialized.current = true;
+    }
   }, [data]);
   async function save(e: React.FormEvent) {
     e.preventDefault();
