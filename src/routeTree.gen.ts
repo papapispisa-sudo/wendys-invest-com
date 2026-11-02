@@ -22,6 +22,7 @@ import { Route as ParrainageRouteImport } from './routes/parrainage'
 import { Route as ProduitsRouteImport } from './routes/produits'
 import { Route as RetraitRouteImport } from './routes/retrait'
 import { Route as RoueRouteImport } from './routes/roue'
+import { Route as RCodeRouteImport } from './routes/r/$code'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -88,6 +89,11 @@ const RoueRoute = RoueRouteImport.update({
   path: '/roue',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RCodeRoute = RCodeRouteImport.update({
+  id: '/r/$code',
+  path: '/r/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/produits': typeof ProduitsRoute
   '/retrait': typeof RetraitRoute
   '/roue': typeof RoueRoute
+  '/r/$code': typeof RCodeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/produits': typeof ProduitsRoute
   '/retrait': typeof RetraitRoute
   '/roue': typeof RoueRoute
+  '/r/$code': typeof RCodeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/produits': typeof ProduitsRoute
   '/retrait': typeof RetraitRoute
   '/roue': typeof RoueRoute
+  '/r/$code': typeof RCodeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/produits'
     | '/retrait'
     | '/roue'
+    | '/r/$code'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/produits'
     | '/retrait'
     | '/roue'
+    | '/r/$code'
   id:
     | '__root__'
     | '/'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/produits'
     | '/retrait'
     | '/roue'
+    | '/r/$code'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -197,6 +209,7 @@ export interface RootRouteChildren {
   ProduitsRoute: typeof ProduitsRoute
   RetraitRoute: typeof RetraitRoute
   RoueRoute: typeof RoueRoute
+  RCodeRoute: typeof RCodeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoueRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/r/$code': {
+      id: '/r/$code'
+      path: '/r/$code'
+      fullPath: '/r/$code'
+      preLoaderRoute: typeof RCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -309,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProduitsRoute: ProduitsRoute,
   RetraitRoute: RetraitRoute,
   RoueRoute: RoueRoute,
+  RCodeRoute: RCodeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
