@@ -90,8 +90,16 @@ function Parrainage() {
             <Copy className="h-4 w-4" /> Copier
           </Button>
         </div>
-        <div className="mt-3 rounded-lg bg-muted p-2 text-xs break-all text-muted-foreground">
-          {link}
+        <div className="mt-3 flex items-center gap-2 rounded-lg bg-muted p-2">
+          <p className="flex-1 truncate text-xs text-muted-foreground">{link}</p>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => copy(link)}
+            className="shrink-0 gap-1"
+          >
+            <Copy className="h-4 w-4" /> Copier le lien
+          </Button>
         </div>
         <Button className="mt-3 h-11 w-full gap-2 font-bold" onClick={share}>
           <Share2 className="h-4 w-4" /> Partager mon lien
