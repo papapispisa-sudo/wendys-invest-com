@@ -15,6 +15,13 @@
       "when": 1792027044456,
       "tag": "0001_site_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793607285748,
+      "tag": "0002_financial_settings_referral_details",
+      "breakpoints": true
     }
   ]
 }

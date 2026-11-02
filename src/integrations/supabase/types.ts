@@ -242,39 +242,66 @@ export type Database = {
       site_settings: {
         Row: {
           announcement: string
+          daily_bonus: number
           id: boolean
+          min_deposit: number
+          min_withdrawal: number
           payment_url: string
           popup_enabled: boolean
           popup_message: string
           popup_title: string
+          referral_rate_1: number
+          referral_rate_2: number
+          referral_rate_3: number
+          signup_bonus: number
           support_url: string
           telegram_url: string
           updated_at: string
           whatsapp_url: string
+          withdrawal_end_hour: number
+          withdrawal_start_hour: number
         }
         Insert: {
           announcement?: string
+          daily_bonus?: number
           id?: boolean
+          min_deposit?: number
+          min_withdrawal?: number
           payment_url?: string
           popup_enabled?: boolean
           popup_message?: string
           popup_title?: string
+          referral_rate_1?: number
+          referral_rate_2?: number
+          referral_rate_3?: number
+          signup_bonus?: number
           support_url?: string
           telegram_url?: string
           updated_at?: string
           whatsapp_url?: string
+          withdrawal_end_hour?: number
+          withdrawal_start_hour?: number
         }
         Update: {
           announcement?: string
+          daily_bonus?: number
           id?: boolean
+          min_deposit?: number
+          min_withdrawal?: number
           payment_url?: string
           popup_enabled?: boolean
           popup_message?: string
           popup_title?: string
+          referral_rate_1?: number
+          referral_rate_2?: number
+          referral_rate_3?: number
+          signup_bonus?: number
           support_url?: string
           telegram_url?: string
           updated_at?: string
           whatsapp_url?: string
+          withdrawal_end_hour?: number
+          withdrawal_start_hour?: number
         }
         Relationships: []
       }
@@ -500,6 +527,10 @@ export type Database = {
           user_phone: string
         }[]
       }
+      admin_update_financial_settings: {
+        Args: { p_settings: Json }
+        Returns: undefined
+      }
       admin_update_site_settings: {
         Args: {
           p_announcement: string
@@ -633,6 +664,17 @@ export type Database = {
       is_admin: { Args: never; Returns: boolean }
       purchase_product: { Args: { p_product_id: string }; Returns: undefined }
       redeem_bonus_code: { Args: { p_code: string }; Returns: number }
+      referral_details: {
+        Args: never
+        Returns: {
+          country: string
+          level: number
+          phone: string
+          total_invested: number
+          total_withdrawn: number
+          user_id: string
+        }[]
+      }
       referral_stats: {
         Args: never
         Returns: {
