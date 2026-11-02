@@ -33,7 +33,7 @@ function Parrainage() {
 
   const link =
     typeof window !== "undefined" && profile
-      ? `${window.location.origin}/?ref=${profile.invite_code}`
+      ? `${window.location.origin}/r/${profile.invite_code}`
       : "";
 
   async function copy(text: string) {
@@ -41,7 +41,19 @@ function Parrainage() {
       await navigator.clipboard.writeText(text);
       toast.success("Copié !");
     } catch {
-      toast.error("Copie impossible");
+      try {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        toast.success("Copié !");
+      } catch {
+        toast.error("Copie impossible");
+      }
     }
   }
 
