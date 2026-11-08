@@ -3,4 +3,6 @@
 - [x] Appliquer la plage de retrait 10 h–17 h GMT partout et vérifier.
 - [x] Afficher les coordonnées, investissements et retraits cumulés des filleuls.
 - [x] Ajouter les réglages financiers administrateur et les appliquer côté site et base.
-- [x] Vérifier les règles et les parcours connectés.
+- [x] Vérifier les règles et les parcours connectés.- [ ] Publier le site (remise en marche)
+- [ ] Passer la visibilité en public pour supprimer la barre « Make public »
+- [ ] Masquer le badge « Edit with Lovable » si le plan le permet
