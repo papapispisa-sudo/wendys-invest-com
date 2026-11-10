@@ -22,6 +22,7 @@ import { Route as ParrainageRouteImport } from './routes/parrainage'
 import { Route as ProduitsRouteImport } from './routes/produits'
 import { Route as RetraitRouteImport } from './routes/retrait'
 import { Route as RoueRouteImport } from './routes/roue'
+import { Route as ServiceClientRouteImport } from './routes/service-client'
 import { Route as RCodeRouteImport } from './routes/r/$code'
 
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +90,11 @@ const RoueRoute = RoueRouteImport.update({
   path: '/roue',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServiceClientRoute = ServiceClientRouteImport.update({
+  id: '/service-client',
+  path: '/service-client',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RCodeRoute = RCodeRouteImport.update({
   id: '/r/$code',
   path: '/r/$code',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/produits': typeof ProduitsRoute
   '/retrait': typeof RetraitRoute
   '/roue': typeof RoueRoute
+  '/service-client': typeof ServiceClientRoute
   '/r/$code': typeof RCodeRoute
 }
 export interface FileRoutesByTo {
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/produits': typeof ProduitsRoute
   '/retrait': typeof RetraitRoute
   '/roue': typeof RoueRoute
+  '/service-client': typeof ServiceClientRoute
   '/r/$code': typeof RCodeRoute
 }
 export interface FileRoutesById {
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/produits': typeof ProduitsRoute
   '/retrait': typeof RetraitRoute
   '/roue': typeof RoueRoute
+  '/service-client': typeof ServiceClientRoute
   '/r/$code': typeof RCodeRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/produits'
     | '/retrait'
     | '/roue'
+    | '/service-client'
     | '/r/$code'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/produits'
     | '/retrait'
     | '/roue'
+    | '/service-client'
     | '/r/$code'
   id:
     | '__root__'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/produits'
     | '/retrait'
     | '/roue'
+    | '/service-client'
     | '/r/$code'
   fileRoutesById: FileRoutesById
 }
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   ProduitsRoute: typeof ProduitsRoute
   RetraitRoute: typeof RetraitRoute
   RoueRoute: typeof RoueRoute
+  ServiceClientRoute: typeof ServiceClientRoute
   RCodeRoute: typeof RCodeRoute
 }
 
@@ -305,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoueRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/service-client': {
+      id: '/service-client'
+      path: '/service-client'
+      fullPath: '/service-client'
+      preLoaderRoute: typeof ServiceClientRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/r/$code': {
       id: '/r/$code'
       path: '/r/$code'
@@ -329,6 +349,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProduitsRoute: ProduitsRoute,
   RetraitRoute: RetraitRoute,
   RoueRoute: RoueRoute,
+  ServiceClientRoute: ServiceClientRoute,
   RCodeRoute: RCodeRoute,
 }
 export const routeTree = rootRouteImport
