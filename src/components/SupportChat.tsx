@@ -1,15 +1,47 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Send } from "lucide-react";
+import { ImagePlus, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+
+const TOPICS = [
+  "Problème de dépôt",
+  "Problème de retrait",
+  "Achat de produit",
+  "Revenus journaliers",
+  "Parrainage / commissions",
+  "Code bonus",
+  "Mon compte",
+  "Autre question",
+];
+
+function SupportImage({ path }: { path: string }) {
+  const { data: url } = useQuery({
+    queryKey: ["support-img", path],
+    staleTime: 50 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await supabase.storage.from("support").createSignedUrl(path, 3600);
+      return data?.signedUrl ?? null;
+    },
+  });
+  if (!url) return <div className="h-32 w-40 animate-pulse rounded-lg bg-muted" />;
+  return (
+    <a href={url} target="_blank" rel="noreferrer">
+      <img src={url} alt="Image jointe" className="mb-1 max-h-60 rounded-lg object-cover" />
+    </a>
+  );
+}
 
 export function SupportChat({ userId, asAdmin = false }: { userId: string; asAdmin?: boolean }) {
   const qc = useQueryClient();
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const preview = file ? URL.createObjectURL(file) : null;
+  useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
   const { data = [] } = useQuery({
     queryKey: ["support", userId],
     refetchInterval: 10000,
@@ -25,13 +57,20 @@ export function SupportChat({ userId, asAdmin = false }: { userId: string; asAdm
 
   const send = async () => {
     const body = text.trim();
-    if (!body) return;
+    if (!body && !file) return;
     if (body.length > 2000) { toast.error("Message trop long (2000 caractères max)"); return; }
     setBusy(true);
-    const { error } = await supabase.from("support_messages").insert({ user_id: userId, from_admin: asAdmin, body });
+    let image_path: string | null = null;
+    if (file) {
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+      image_path = `${userId}/${crypto.randomUUID()}.${ext}`;
+      const up = await supabase.storage.from("support").upload(image_path, file, { contentType: file.type });
+      if (up.error) { setBusy(false); toast.error("Envoi de l'image impossible : " + up.error.message); return; }
+    }
+    const { error } = await supabase.from("support_messages").insert({ user_id: userId, from_admin: asAdmin, body, image_path });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
-    setText("");
+    setText(""); setFile(null);
     qc.invalidateQueries({ queryKey: ["support", userId] });
     qc.invalidateQueries({ queryKey: ["admin-support"] });
   };
@@ -50,7 +89,8 @@ export function SupportChat({ userId, asAdmin = false }: { userId: string; asAdm
             <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
               <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-card border"}`}>
                 <p className="text-[10px] font-semibold opacity-70">{m.from_admin ? "Service client" : asAdmin ? "Utilisateur" : "Vous"}</p>
-                <p className="whitespace-pre-wrap break-words">{m.body}</p>
+                {m.image_path && <SupportImage path={m.image_path} />}
+                {m.body && <p className="whitespace-pre-wrap break-words">{m.body}</p>}
                 <p className="mt-1 text-[10px] opacity-60">{new Date(m.created_at).toLocaleString("fr-FR")}</p>
               </div>
             </div>
@@ -58,11 +98,41 @@ export function SupportChat({ userId, asAdmin = false }: { userId: string; asAdm
         })}
         <div ref={endRef} />
       </div>
+      {!asAdmin && (
+        <div>
+          <p className="mb-1 text-xs font-semibold text-muted-foreground">Objet de votre demande</p>
+          <div className="flex flex-wrap gap-1.5">
+            {TOPICS.map((t) => (
+              <button key={t} type="button" onClick={() => setText((v) => `[${t}] ` + v.replace(/^\[[^\]]*\]\s*/, ""))}
+                className="rounded-full border bg-card px-3 py-1 text-xs font-medium hover:border-primary hover:text-primary">
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      {preview && (
+        <div className="relative w-fit">
+          <img src={preview} alt="Aperçu" className="h-24 rounded-lg object-cover" />
+          <button type="button" onClick={() => setFile(null)} aria-label="Retirer l'image"
+            className="absolute -right-2 -top-2 rounded-full bg-primary p-1 text-primary-foreground"><X className="h-3 w-3" /></button>
+        </div>
+      )}
       <div className="flex gap-2">
+        <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
+          const f = e.target.files?.[0]; e.target.value = "";
+          if (!f) return;
+          if (!f.type.startsWith("image/")) { toast.error("Seules les images sont acceptées"); return; }
+          if (f.size > 5 * 1024 * 1024) { toast.error("Image trop lourde (5 Mo max)"); return; }
+          setFile(f);
+        }} />
+        <Button type="button" variant="outline" className="h-auto" aria-label="Joindre une image" onClick={() => fileRef.current?.click()}>
+          <ImagePlus className="h-4 w-4" />
+        </Button>
         <textarea rows={2} value={text} onChange={(e) => setText(e.target.value)} maxLength={2000}
           placeholder={asAdmin ? "Votre réponse..." : "Votre message..."}
           className="flex-1 rounded-xl border bg-background p-2 text-sm" />
-        <Button onClick={send} disabled={busy || !text.trim()} className="h-auto" aria-label="Envoyer">
+        <Button onClick={send} disabled={busy || (!text.trim() && !file)} className="h-auto" aria-label="Envoyer">
           <Send className="h-4 w-4" />
         </Button>
       </div>
@@ -93,7 +163,7 @@ export function AdminSupportTab() {
               <span className="font-semibold">{t.phone ?? "—"}</span>
               {!t.last_from_admin && <span className="rounded-full bg-primary px-2 text-[10px] text-primary-foreground">À répondre</span>}
             </div>
-            <p className="truncate text-xs text-muted-foreground">{t.last_body}</p>
+            <p className="truncate text-xs text-muted-foreground">{t.last_body || "📷 Image"}</p>
           </button>
         ))}
       </div>
