@@ -305,6 +305,30 @@ export type Database = {
         }
         Relationships: []
       }
+      support_messages: {
+        Row: {
+          body: string
+          created_at: string
+          from_admin: boolean
+          id: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          from_admin?: boolean
+          id?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          from_admin?: boolean
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
@@ -511,6 +535,17 @@ export type Database = {
       admin_set_transaction_status: {
         Args: { p_id: string; p_status: string }
         Returns: undefined
+      }
+      admin_support_threads: {
+        Args: never
+        Returns: {
+          last_at: string
+          last_body: string
+          last_from_admin: boolean
+          phone: string
+          total: number
+          user_id: string
+        }[]
       }
       admin_transactions: {
         Args: { p_status?: string }
