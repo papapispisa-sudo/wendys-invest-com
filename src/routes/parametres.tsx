@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Clock, History, LogOut, Phone, ShieldCheck, Wallet, HandCoins, Users } from "lucide-react";
+import { Clock, History, LogOut, Phone, ShieldCheck, Wallet, HandCoins, Users, MessageCircle } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -89,6 +89,10 @@ function Parametres() {
         <Link to="/historique-parrainages" className="card-soft flex items-center gap-3 p-4">
           <Users className="h-5 w-5 text-primary" />
           <span className="flex-1 font-semibold">Historique des parrainages</span>
+        </Link>
+        <Link to="/service-client" className="card-soft flex items-center gap-3 p-4">
+          <MessageCircle className="h-5 w-5 text-primary" />
+          <span className="flex-1 font-semibold">Service client</span>
         </Link>
         {isAdmin && (
           <Link to="/admin" className="card-soft flex items-center gap-3 p-4">

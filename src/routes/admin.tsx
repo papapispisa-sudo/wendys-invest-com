@@ -13,6 +13,7 @@ import {
   Layers,
   LogOut,
   Menu,
+  MessageCircle,
   Pencil,
   Plus,
   Search,
@@ -43,6 +44,7 @@ import {
 import { adminDeleteUser, adminResetPassword } from "@/lib/admin.functions";
 import { formatFcfa } from "@/lib/wendys";
 import { SiteSettingsTab } from "@/components/SiteSettingsTab";
+import { AdminSupportTab } from "@/components/SupportChat";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -72,6 +74,7 @@ const NAV = [
   { id: "types", label: "Types de produits", icon: Layers },
   { id: "wheel", label: "Roue de la chance", icon: Gift },
   { id: "codes", label: "Codes bonus", icon: Ticket },
+  { id: "support", label: "Service client", icon: MessageCircle },
   { id: "site", label: "Paramètres du site", icon: Pencil },
 ] as const;
 
@@ -190,6 +193,7 @@ function AdminPage() {
           {tab === "wheel" && <WheelTab />}
           {tab === "codes" && <CodesTab />}
           {tab === "site" && <SiteSettingsTab />}
+          {tab === "support" && <AdminSupportTab />}
         </main>
       </div>
     </div>
